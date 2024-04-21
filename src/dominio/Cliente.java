@@ -1,9 +1,14 @@
 package dominio;
 
+import tads.Lista;
+
+import java.util.List;
+
 public class Cliente implements Comparable<Cliente> {
     private String pasaporte;
     private String nombre;
     private int edad;
+    private Lista<Pasaje> pasajes;//tal vez cambiemos a pila en un futuro
 
     @Override
     public String toString() {
@@ -18,6 +23,7 @@ public class Cliente implements Comparable<Cliente> {
         this.pasaporte = pasaporte;
         this.nombre = nombre;
         this.edad = edad;
+        this.pasajes = new Lista<>();
     }
 
     @Override
@@ -47,5 +53,13 @@ public class Cliente implements Comparable<Cliente> {
 
     public void setEdad(int edad) {
         this.edad = edad;
+    }
+
+    public Lista<Pasaje> getPasajes() {
+        return pasajes;
+    }
+
+    public void setPasajes(Lista<Pasaje> pasajes) {
+        this.pasajes = pasajes;
     }
 }

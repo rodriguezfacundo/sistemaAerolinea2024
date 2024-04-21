@@ -1,5 +1,8 @@
 package dominio;
 
+import tads.Cola;
+import tads.Lista;
+
 public class Vuelo implements Comparable<Vuelo> {
     private String codigoVuelo;
     private String aerolinea;
@@ -8,8 +11,12 @@ public class Vuelo implements Comparable<Vuelo> {
     private int dia;
     private int mes;
     private int anio;
-    private int cantPasajesEcon;
-    private int cantPasajesPClase;
+    private Lista<Pasaje> pasajesEconomicos;
+    private Lista<Pasaje> pasajesPrimeraClase;
+    private Lista<Pasaje> pasajesDevueltos;
+    private Cola<Pasaje> pasajesPendientes;
+
+
 
     public Vuelo(String codigoVuelo, String aerolinea, String codAvion, String paisDestino, int dia, int mes, int anio, int cantPasajesEcon, int cantPasajesPClase) {
         this.codigoVuelo = codigoVuelo;
@@ -19,8 +26,10 @@ public class Vuelo implements Comparable<Vuelo> {
         this.dia = dia;
         this.mes = mes;
         this.anio = anio;
-        this.cantPasajesEcon = cantPasajesEcon;
-        this.cantPasajesPClase = cantPasajesPClase;
+        this.pasajesEconomicos = new Lista<>();
+        this.pasajesPrimeraClase = new Lista<>();
+        this.pasajesDevueltos = new Lista<>();
+        this.pasajesPendientes = new Cola<>();
     }
 
     @Override
@@ -84,21 +93,6 @@ public class Vuelo implements Comparable<Vuelo> {
         this.anio = anio;
     }
 
-    public int getCantPasajesEcon() {
-        return cantPasajesEcon;
-    }
-
-    public void setCantPasajesEcon(int cantPasajesEcon) {
-        this.cantPasajesEcon = cantPasajesEcon;
-    }
-
-    public int getCantPasajesPClase() {
-        return cantPasajesPClase;
-    }
-
-    public void setCantPasajesPClase(int cantPasajesPClase) {
-        this.cantPasajesPClase = cantPasajesPClase;
-    }
 
     @Override
     public String toString() {
@@ -110,8 +104,22 @@ public class Vuelo implements Comparable<Vuelo> {
                 ", dia=" + dia +
                 ", mes=" + mes +
                 ", anio=" + anio +
-                ", cantPasajesEcon=" + cantPasajesEcon +
-                ", cantPasajesPClase=" + cantPasajesPClase +
                 '}';
+    }
+
+    public Lista<Pasaje> getPasajesEconomicos() {
+        return pasajesEconomicos;
+    }
+
+    public Lista<Pasaje> getPasajesPrimeraClase() {
+        return pasajesPrimeraClase;
+    }
+
+    public Lista<Pasaje> getPasajesDevueltos() {
+        return pasajesDevueltos;
+    }
+
+    public Cola<Pasaje> getPasajesPendientes() {
+        return pasajesPendientes;
     }
 }

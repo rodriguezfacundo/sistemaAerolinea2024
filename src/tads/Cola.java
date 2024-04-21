@@ -31,7 +31,15 @@ public class Cola<T extends Comparable<T>> implements ICola<T> {
     }
 
     public Cola(int cantMax) {
+        this.inicio = null;
+        this.cantidad = 0;
         this.tope = cantMax;
+    }
+
+    public Cola() {
+        this.inicio = null;
+        this.cantidad = 0;
+        this.tope = Integer.MAX_VALUE;
     }
 
     @Override
