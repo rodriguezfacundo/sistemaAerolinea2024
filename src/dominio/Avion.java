@@ -1,5 +1,4 @@
 package dominio;
-
 public class Avion implements Comparable<Avion> {
     private String codigo;
     private int capacidadMax;

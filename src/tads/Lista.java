@@ -2,9 +2,22 @@ package tads;
 
 public class Lista<T extends Comparable<T>> implements ILista<T> {
     private Nodo<T> inicio;
+    private int cantElementos;
+    private int cantMaxima;
 
     public Lista() {
         this.inicio = null;
+        this.cantElementos = 0;
+        this.cantMaxima = Integer.MAX_VALUE;
+    }
+    public Lista(int cantMaxima) {
+        this.inicio = null;
+        this.cantElementos = 0;
+        this.cantMaxima = cantMaxima;
+    }
+
+    public int getCantMaxima(){
+        return this.cantMaxima;
     }
 
     public Nodo<T> getInicio() {
@@ -103,6 +116,7 @@ public class Lista<T extends Comparable<T>> implements ILista<T> {
 
                 }
             }
+            this.cantElementos -= 1;
         }
     }
 
@@ -117,9 +131,10 @@ public class Lista<T extends Comparable<T>> implements ILista<T> {
                 actual = actual.getSiguiente();
             }
             Nodo<T> nuevo = new Nodo<T>(x);
-            nuevo.setSiguiente(actual.getSiguiente())  ;
+            nuevo.setSiguiente(actual.getSiguiente());
             actual.setSiguiente(nuevo);
         }
+        this.cantElementos += 1;
     }
 
     @Override

@@ -14,10 +14,10 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno crearSistemaDeAutogestion() {
-        this.aerolineas = new Lista<Aerolinea>();
-        this.clientes = new Lista<Cliente>();
-        this.pasajes = new Lista<Pasaje>();
-        this.vuelos = new Lista<Vuelo>();
+        this.aerolineas = new Lista<>();
+        this.clientes = new Lista<>();
+        this.pasajes = new Lista<>();
+        this.vuelos = new Lista<>();
         return  Retorno.ok();
     }
 
@@ -29,7 +29,6 @@ public class Sistema implements IObligatorio {
         } else if(cantMaxAviones <=0){
             return Retorno.error2();
         } else{
-            aerolinea.setCantMaxAviones(cantMaxAviones);
             aerolineas.agregarOrdenado(aerolinea);
             return Retorno.ok();
         }
@@ -62,12 +61,11 @@ public class Sistema implements IObligatorio {
             return Retorno.error1();
         } else if ((capacidadMax < 9) || (capacidadMax % 3 != 0)) {
             return Retorno.error2();
-        } else if(nodoAerolinea.getDato().getCantMaxAviones() == 0){
+        } else if(nodoAerolinea.getDato().getAviones().getCantMaxima() == nodoAerolinea.getDato().getAviones().cantidadElementos()){
             return Retorno.error4();
         } else{
             Aerolinea aerolinea = nodoAerolinea.getDato();
-            aerolinea.setCantMaxAviones(aerolinea.getCantMaxAviones() - 1);
-            aerolinea.getAviones().agregarFinal(avion);
+            aerolinea.getAviones().agregarOrdenado(avion);
             return Retorno.ok();
         }
     }
@@ -108,22 +106,16 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno listarAerolineas() {
-        if (!aerolineas.esVacia()) {
             aerolineas.mostrar();
             return Retorno.ok();
-        } else{
-            //Me parece que en la letra no dice nada de validar si hay aerolineas o no, pero por las dudas meti esta
-            //validacion.
-            return Retorno.error1();
-        }
     }
 
     @Override
     public Retorno listarAvionesDeAerolinea(String nombre) {
         Nodo<Aerolinea> nodoAerolinea = this.aerolineas.obtenerElemento(new Aerolinea(nombre, "", 1));
         if (nodoAerolinea != null){
-            Aerolinea a = nodoAerolinea.getDato();
-            Lista<Avion> aviones = a.getAviones();
+            Aerolinea aerolinea = nodoAerolinea.getDato();
+            Lista<Avion> aviones = aerolinea.getAviones();
             aviones.mostrar();
             return Retorno.ok();
         }else{

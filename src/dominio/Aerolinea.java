@@ -5,14 +5,12 @@ import tads.Lista;
 public class Aerolinea implements Comparable<Aerolinea> {
     private String nombre;
     private String pais;
-    private int cantMaxAviones;
-    private Lista<Avion> aviones = new Lista<>();
+    private Lista<Avion> aviones;
 
     public Aerolinea(String nombre, String pais, int cantMaxAviones) {
         this.nombre = nombre;
         this.pais = pais;
-        this.cantMaxAviones = cantMaxAviones;
-        this.aviones = new Lista<Avion>();
+        this.aviones = new Lista<>(cantMaxAviones);
     }
 
 
@@ -37,13 +35,7 @@ public class Aerolinea implements Comparable<Aerolinea> {
         this.pais = pais;
     }
 
-    public int getCantMaxAviones() {
-        return cantMaxAviones;
-    }
 
-    public void setCantMaxAviones(int cantMaxAviones) {
-        this.cantMaxAviones = cantMaxAviones;
-    }
 
     public Lista<Avion> getAviones() {
         return aviones;
@@ -58,7 +50,7 @@ public class Aerolinea implements Comparable<Aerolinea> {
         return "Aerolinea{" +
                 "nombre='" + nombre + '\'' +
                 ", pais='" + pais + '\'' +
-                ", cantMaxAviones=" + cantMaxAviones +
+                ", cantMaxAviones=" + aviones.getCantMaxima() +
                 '}';
     }
 }
