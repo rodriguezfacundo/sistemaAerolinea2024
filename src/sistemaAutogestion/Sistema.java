@@ -7,8 +7,7 @@ import tads.Nodo;
 public class Sistema implements IObligatorio {
 
     private Lista<Aerolinea> aerolineas;
-    private Lista<Cliente> clientes;
-    private Lista<Pasaje> pasajes;
+    private Lista<Cliente> clientes;//Seguramente se cambie a pila.
     private Lista<Vuelo> vuelos;
 
 
@@ -16,7 +15,6 @@ public class Sistema implements IObligatorio {
     public Retorno crearSistemaDeAutogestion() {
         this.aerolineas = new Lista<>();
         this.clientes = new Lista<>();
-        this.pasajes = new Lista<>();
         this.vuelos = new Lista<>();
         return  Retorno.ok();
     }
