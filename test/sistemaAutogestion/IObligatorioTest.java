@@ -26,28 +26,6 @@ public class IObligatorioTest {
     }
 
 
-
-    @Test
-    public void ejecutarObligatorio(){
-        testCrearSistemaDeGestionOk();
-        testCrearAerolineaOk();
-        testCrearAerolineaError1();
-        testCrearAerolineaError2();
-        testRegistrarAvionOk();
-        testEliminarAerolineaOk();
-        testEliminarAerolineaError1();
-        testEliminarAerolineaError2();
-        testRegistrarAvionError1();
-        testRegistrarAvionError2();
-        testRegistrarAvionError3();
-        testRegistrarAvionError4();
-        testEliminarAvionError1();
-        testEliminarAvionError2();
-        testListarAerolineasOk();
-        testListarAvionesDeAerolineaOk();
-        testListarAvionesDeAerolineaError1();
-        prueba.imprimirResultadosPrueba();
-    }
     @Test
     public void testCrearSistemaDeGestionOk() {
         Retorno r = miSistema.crearSistemaDeAutogestion();

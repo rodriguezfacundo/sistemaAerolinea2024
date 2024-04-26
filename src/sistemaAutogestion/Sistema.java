@@ -10,6 +10,12 @@ public class Sistema implements IObligatorio {
     private Lista<Cliente> clientes;//Seguramente se cambie a pila.
     private Lista<Vuelo> vuelos;
 
+    public Sistema() {
+        this.aerolineas = new Lista<>();
+        this.clientes = new Lista<>();
+        this.vuelos = new Lista<>();
+    }
+
 
     @Override
     public Retorno crearSistemaDeAutogestion() {
