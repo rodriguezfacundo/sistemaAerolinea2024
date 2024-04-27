@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author facundo
+ * @author facundo y fernando
  */
 public class IObligatorioTest {
 
@@ -48,9 +48,14 @@ public class IObligatorioTest {
         assertEquals(Retorno.ok().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.ok().resultado, "Se creo la nueva aerolinea Aerolina Uruguaya");
 
+        r = miSistema.crearAerolinea("Aerolinea Iberia", "Espania", 36);
+        assertEquals(Retorno.ok().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.ok().resultado, "Se creo la nueva aerolinea Aerolina Iberia");
+
     }
     @Test
     public void testCrearAerolineaError1() {
+        precarga();
         Retorno r = miSistema.crearAerolinea("Aerolinea Splinter", "Italia", 12);
         assertEquals(Retorno.error1().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.error1().resultado, "Ya existe la aerolinea Splinter, no pudo crearse");
@@ -62,6 +67,10 @@ public class IObligatorioTest {
         r = miSistema.crearAerolinea("Aerolinea Uruguaya", "Uruguay", 10);
         assertEquals(Retorno.error1().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.error1().resultado, "Ya existe la aerolinea Uruguaya, no pudo crearse");
+
+        r = miSistema.crearAerolinea("Aerolinea Iberia", "Espania", 36);
+        assertEquals(Retorno.error1().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error1().resultado, "Ya existe la aerolinea Iberia, no pudo crearse");
 
     }
     @Test
@@ -79,10 +88,15 @@ public class IObligatorioTest {
         assertEquals(Retorno.error2().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.error2().resultado, "No puedes registar una aerolinea sin aviones:(");
 
+        r = miSistema.crearAerolinea("Aerolinea Cubana", "Cuba", -1);
+        assertEquals(Retorno.error2().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error2().resultado, "No puedes registar una aerolinea sin aviones:(");
+
     }
 
     @Test
     public void testEliminarAerolineaOk() {
+        precarga();
         Retorno r = miSistema.eliminarAerolinea("Aerolinea Uruguaya");
         assertEquals(Retorno.ok().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.ok().resultado, "Se elimino correctamente la Aerolinea Uruguaya");
@@ -91,20 +105,35 @@ public class IObligatorioTest {
     @Test
 
     public void testEliminarAerolineaError1() {
+        precarga();
         Retorno r = miSistema.eliminarAerolinea("Aerolinea Venezolana");
         assertEquals(Retorno.error1().resultado,r.resultado);
-        prueba.ver(r.resultado, Retorno.error1().resultado, "No existe la Aerolinea Venezolana");
+        prueba.ver(r.resultado, Retorno.error1().resultado, "No existe la Aerolinea Venezolana, no se pudo eliminar");
+
+        r = miSistema.eliminarAerolinea("Aerolinea Lele");
+        assertEquals(Retorno.error1().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error1().resultado, "No existe la Aerolinea Lele, no se pudo eliminar");
+
+        r = miSistema.eliminarAerolinea("Aerolinea Instint");
+        assertEquals(Retorno.error1().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error1().resultado, "No existe la Aerolinea Instint, no se pudo eliminar");
+
+        r = miSistema.eliminarAerolinea("Aerolinea Piral");
+        assertEquals(Retorno.error1().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error1().resultado, "No existe la Aerolinea Piral, no se pudo eliminar");
     }
     @Test
 
     public void testEliminarAerolineaError2() {
-        Retorno r = miSistema.eliminarAerolinea("Aerolinea Splinter");
+        precarga();
+        Retorno r = miSistema.eliminarAerolinea("Aerolinea Irlandesa");
         assertEquals(Retorno.error2().resultado,r.resultado);
-        prueba.ver(r.resultado, Retorno.error2().resultado, "No puedes eliminar la aerolinea Splinter ya que contiene mas de un avion");
+        prueba.ver(r.resultado, Retorno.error2().resultado, "No puedes eliminar la aerolinea Irlandesa ya que contiene mas de un avion");
     }
 
     @Test
     public void testRegistrarAvionOk() {
+        precarga();
         Retorno r = miSistema.registrarAvion("AVA123", 30, "Aerolinea Splinter");
         assertEquals(Retorno.ok().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.ok().resultado, "Se registro el avion AVA123 en Aerolinea Splinter");
@@ -157,16 +186,30 @@ public class IObligatorioTest {
     }
     @Test
     public void testRegistrarAvionError1() {
-        Retorno r = miSistema.registrarAvion("AVA123", 30, "Aerolinea Splinter");
+        precarga();
+        Retorno r = miSistema.registrarAvion("SEC777", 30, "Aerolinea Irlandesa");
         assertEquals(Retorno.error1().resultado,r.resultado);
-        prueba.ver(r.resultado, Retorno.error1().resultado, "Ya existe el avion AVA123 en Aerolinea Splinter, no se pudo registrar");
+        prueba.ver(r.resultado, Retorno.error1().resultado, "Ya existe el avion SEC777 en Aerolinea Irlandesa, no se pudo registrar");
+
+        r = miSistema.registrarAvion("IFF123", 30, "Aerolinea Irlandesa");
+        assertEquals(Retorno.error1().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error1().resultado, "Ya existe el avion IFF123 en Aerolinea Irlandesa, no se pudo registrar");
 
     }
     @Test
     public void testRegistrarAvionError2() {
-        Retorno r = miSistema.registrarAvion("UTU441", 5, "Aerolinea Splinter");
+        precarga();
+        Retorno r = miSistema.registrarAvion("UTU441", 5, "Aerolinea Irlandesa");
         assertEquals(Retorno.error2().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.error2().resultado, "No se puede registrar un avion donde su capacidad maxima sea < 9 o  % 3 != 0");
+
+        r = miSistema.registrarAvion("UTE334", 11, "Aerolinea Irlandesa");
+        assertEquals(Retorno.error2().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error2().resultado, "No se puede registrar un avion donde su capacidad maxima sea < 9 o  % 3 !=");
+
+        r = miSistema.registrarAvion("PPI333", 13, "Aerolinea Irlandesa");
+        assertEquals(Retorno.error2().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error2().resultado, "No se puede registrar un avion donde su capacidad maxima sea < 9 o  % 3 !=");
     }
     @Test
     public void testRegistrarAvionError3() {
@@ -174,20 +217,34 @@ public class IObligatorioTest {
         assertEquals(Retorno.error3().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.error3().resultado, "No se puede registrar un avion, la Aerolinea Petrolera no existe");
 
+        r = miSistema.registrarAvion("AVA123", 0, "Aerolinea Opticus");
+        assertEquals(Retorno.error3().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error3().resultado, "No se puede registrar un avion, la Aerolinea Opticus no existe");
+
+        r = miSistema.registrarAvion("AVA123", 0, "Aerolinea Nectar");
+        assertEquals(Retorno.error3().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error3().resultado, "No se puede registrar un avion, la Aerolinea Nectar no existe");
+
     }
     @Test
     public void testRegistrarAvionError4() {
-        Retorno r = miSistema.registrarAvion("HHH333", 33, "Aerolinea Splinter");
+        precarga();
+        Retorno r = miSistema.registrarAvion("HHH333", 33, "Aerolinea Irlandesa");
         assertEquals(Retorno.error4().resultado,r.resultado);
-        prueba.ver(r.resultado, Retorno.error4().resultado, "No se puede registrar un avion que supera la cantidad maxima permitida de la Aeroliena Splinter ");
+        prueba.ver(r.resultado, Retorno.error4().resultado, "No se puede registrar un avion que supera la cantidad maxima permitida de aviones en la aerolinea Irlandesa ");
 
     }
 
     @Test
     public void testEliminarAvionOk() {
-        Retorno r = miSistema.eliminarAvion("Aerolinea Splinter", "AVA123");
+        precarga();
+        Retorno r = miSistema.eliminarAvion("Aerolinea Irlandesa", "IFF123");
         assertEquals(Retorno.ok().resultado,r.resultado);
-        prueba.ver(r.resultado, Retorno.ok().resultado, "Se ha eliminado exitosamente el avion AVA123 de la Aerolina Splinter");
+        prueba.ver(r.resultado, Retorno.ok().resultado, "Se ha eliminado exitosamente el avion IFF123 de la Aerolina Irlandesa");
+
+        r = miSistema.eliminarAvion("Aerolinea Irlandesa", "FFF000");
+        assertEquals(Retorno.ok().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.ok().resultado, "Se ha eliminado exitosamente el avion FFF000 de la Aerolina Irlandesa");
 
     }
     @Test
@@ -196,12 +253,25 @@ public class IObligatorioTest {
         assertEquals(Retorno.error1().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.error1().resultado, "No se pudo eliminar el avion AVA999 ya que la Aerolina Noba no existe");
 
+        r = miSistema.eliminarAvion("Aerolinea Ultra", "AVA999");
+        assertEquals(Retorno.error1().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error1().resultado, "No se pudo eliminar el avion AVA999 ya que la Aerolina Ultra no existe");
+
+        r = miSistema.eliminarAvion("Aerolinea Ether", "AVA999");
+        assertEquals(Retorno.error1().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error1().resultado, "No se pudo eliminar el avion AVA999 ya que la Aerolina Ether no existe");
+
+        r = miSistema.eliminarAvion("Aerolinea Lotus", "AVA999");
+        assertEquals(Retorno.error1().resultado,r.resultado);
+        prueba.ver(r.resultado, Retorno.error1().resultado, "No se pudo eliminar el avion AVA999 ya que la Aerolina Lotus no existe");
+
     }
     @Test
     public void testEliminarAvionError2() {
-        Retorno r = miSistema.eliminarAvion("Aerolinea Splinter", "UVA443455");
+        precarga();
+        Retorno r = miSistema.eliminarAvion("Aerolinea Irlandesa", "UVA443455");
         assertEquals(Retorno.error2().resultado,r.resultado);
-        prueba.ver(r.resultado, Retorno.error2().resultado, "No se pudo eliminar al avion UVA443455 ya que no existe registrado en la aerolinea Splinter");
+        prueba.ver(r.resultado, Retorno.error2().resultado, "No se pudo eliminar al avion UVA443455 ya que no existe registrado en la aerolinea Irlandesa");
 
     }
     /*
@@ -235,6 +305,7 @@ public class IObligatorioTest {
 
     @Test
     public void testListarAerolineasOk() {
+        precarga();
         Retorno r = miSistema.listarAerolineas();
         assertEquals(Retorno.ok().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.ok().resultado, "Se listan todas las aerolineas del sistema");
@@ -243,7 +314,8 @@ public class IObligatorioTest {
 
     @Test
     public void testListarAvionesDeAerolineaOk() {
-        Retorno r = miSistema.listarAvionesDeAerolinea("Aerolinea Splinter");
+        precarga();
+        Retorno r = miSistema.listarAvionesDeAerolinea("Aerolinea Irlandesa");
         assertEquals(Retorno.ok().resultado,r.resultado);
         prueba.ver(r.resultado, Retorno.ok().resultado, "Se listan todos los aviones de la Aerolina Splinter");
 
@@ -278,6 +350,20 @@ public class IObligatorioTest {
     @Test
     public void testVistaDeVuelo() {
         //Completar para segunda entrega
+    }
+
+
+    private void precarga(){
+        //Datos paises
+        Retorno r = miSistema.crearAerolinea("Aerolinea Splinter", "Italia", 12);
+        r = miSistema.crearAerolinea("Aerolinea Irlandesa", "Irlanda", 3);
+        r = miSistema.crearAerolinea("Aerolinea Uruguaya", "Uruguay", 10);
+        r = miSistema.crearAerolinea("Aerolinea Iberia", "Espania", 36);
+        //Datos aviones
+        r = miSistema.registrarAvion("SEC777", 45, "Aerolinea Irlandesa");
+        r = miSistema.registrarAvion("IFF123", 45, "Aerolinea Irlandesa");
+        r = miSistema.registrarAvion("FFF000", 45, "Aerolinea Irlandesa");
+
     }
 
 
