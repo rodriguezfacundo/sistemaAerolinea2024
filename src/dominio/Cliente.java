@@ -1,8 +1,11 @@
 package dominio;
 
+import tads.Lista;
+
 public class Cliente implements Comparable<Cliente> {
     private String pasaporte;
     private String nombre;
+    private Lista<Pasaje> PasajesComprados;
     private int edad;
 
     @Override

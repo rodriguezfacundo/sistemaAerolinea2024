@@ -1,6 +1,9 @@
 package dominio;
 
+import tads.Lista;
+
 public class Vuelo implements Comparable<Vuelo> {
+
     private String codigoVuelo;
     private String aerolinea;
     private String codAvion;
@@ -10,6 +13,11 @@ public class Vuelo implements Comparable<Vuelo> {
     private int anio;
     private int cantPasajesEcon;
     private int cantPasajesPClase;
+    private Lista<Pasaje> pasajesEconPend;
+    private Lista<Pasaje> pasajesPrimPend;
+    private Lista<Pasaje> pasajesEconEmi;
+    private Lista<Pasaje> pasajesPrimEmi;
+    private Lista<Pasaje> pasajesDev;
 
     public Vuelo(String codigoVuelo, String aerolinea, String codAvion, String paisDestino, int dia, int mes, int anio, int cantPasajesEcon, int cantPasajesPClase) {
         this.codigoVuelo = codigoVuelo;
@@ -27,13 +35,53 @@ public class Vuelo implements Comparable<Vuelo> {
     public int compareTo(Vuelo o) {
         return 0;
     }
-
+    
     public String getCodigoVuelo() {
         return codigoVuelo;
     }
 
     public void setCodigoVuelo(String codigoVuelo) {
         this.codigoVuelo = codigoVuelo;
+    }
+
+    public void setPasajesEconPend(Lista<Pasaje> pasajesEconPend) {
+        this.pasajesEconPend = pasajesEconPend;
+    }
+
+    public void setPasajesPrimPend(Lista<Pasaje> pasajesPrimPend) {
+        this.pasajesPrimPend = pasajesPrimPend;
+    }
+
+    public void setPasajesEconEmi(Lista<Pasaje> pasajesEconEmi) {
+        this.pasajesEconEmi = pasajesEconEmi;
+    }
+
+    public void setPasajesPrimEmi(Lista<Pasaje> pasajesPrimEmi) {
+        this.pasajesPrimEmi = pasajesPrimEmi;
+    }
+
+    public void setPasajesDev(Lista<Pasaje> pasajesDev) {
+        this.pasajesDev = pasajesDev;
+    }
+
+    public Lista<Pasaje> getPasajesEconPend() {
+        return pasajesEconPend;
+    }
+
+    public Lista<Pasaje> getPasajesPrimPend() {
+        return pasajesPrimPend;
+    }
+
+    public Lista<Pasaje> getPasajesEconEmi() {
+        return pasajesEconEmi;
+    }
+
+    public Lista<Pasaje> getPasajesPrimEmi() {
+        return pasajesPrimEmi;
+    }
+
+    public Lista<Pasaje> getPasajesDev() {
+        return pasajesDev;
     }
 
     public String getAerolinea() {
@@ -102,16 +150,16 @@ public class Vuelo implements Comparable<Vuelo> {
 
     @Override
     public String toString() {
-        return "Vuelo{" +
-                "codigoVuelo='" + codigoVuelo + '\'' +
-                ", aerolinea='" + aerolinea + '\'' +
-                ", codAvion='" + codAvion + '\'' +
-                ", paisDestino='" + paisDestino + '\'' +
-                ", dia=" + dia +
-                ", mes=" + mes +
-                ", anio=" + anio +
-                ", cantPasajesEcon=" + cantPasajesEcon +
-                ", cantPasajesPClase=" + cantPasajesPClase +
-                '}';
+        return "Vuelo{"
+                + "codigoVuelo='" + codigoVuelo + '\''
+                + ", aerolinea='" + aerolinea + '\''
+                + ", codAvion='" + codAvion + '\''
+                + ", paisDestino='" + paisDestino + '\''
+                + ", dia=" + dia
+                + ", mes=" + mes
+                + ", anio=" + anio
+                + ", cantPasajesEcon=" + cantPasajesEcon
+                + ", cantPasajesPClase=" + cantPasajesPClase
+                + '}';
     }
 }
