@@ -11,12 +11,12 @@ public class Vuelo implements Comparable<Vuelo> {
     private int dia;
     private int mes;
     private int anio;
-    private Lista<Pasaje> pasajesEconomicos;
-    private Lista<Pasaje> pasajesPrimeraClase;
+    private Lista<Pasaje> pasajesEconomicosEmitidos;
+    private Lista<Pasaje> pasajesPrimeraClaseEmitidos;
+    private Cola<Pasaje> pasajesPrimeraClasePendientes;
+    private Cola<Pasaje> pasajesEconomicosPendientes;
+    private Cola<Cliente> clientesEnEspera;
     private Lista<Pasaje> pasajesDevueltos;
-    private Cola<Pasaje> pasajesPendientes;
-
-
 
     public Vuelo(String codigoVuelo, String aerolinea, String codAvion, String paisDestino, int dia, int mes, int anio, int cantPasajesEcon, int cantPasajesPClase) {
         this.codigoVuelo = codigoVuelo;
@@ -26,11 +26,54 @@ public class Vuelo implements Comparable<Vuelo> {
         this.dia = dia;
         this.mes = mes;
         this.anio = anio;
-        this.pasajesEconomicos = new Lista<>();
-        this.pasajesPrimeraClase = new Lista<>();
+        this.pasajesEconomicosEmitidos = new Lista<>(cantPasajesEcon);
+        this.pasajesPrimeraClaseEmitidos = new Lista<>(cantPasajesPClase);
+        this.pasajesEconomicosPendientes = new Cola<>();
+        this.pasajesPrimeraClasePendientes = new Cola<>();
+        this.clientesEnEspera = new Cola<>();
         this.pasajesDevueltos = new Lista<>();
-        this.pasajesPendientes = new Cola<>();
     }
+
+    public Lista<Pasaje> getPasajesEconomicosEmitidos() {
+        return pasajesEconomicosEmitidos;
+    }
+
+    public void setPasajesEconomicosEmitidos(Lista<Pasaje> pasajesEconomicosEmitidos) {
+        this.pasajesEconomicosEmitidos = pasajesEconomicosEmitidos;
+    }
+
+    public Lista<Pasaje> getPasajesPrimeraClaseEmitidos() {
+        return pasajesPrimeraClaseEmitidos;
+    }
+
+    public void setPasajesPrimeraClaseEmitidos(Lista<Pasaje> pasajesPrimeraClaseEmitidos) {
+        this.pasajesPrimeraClaseEmitidos = pasajesPrimeraClaseEmitidos;
+    }
+
+    public Cola<Pasaje> getPasajesPrimeraClasePendientes() {
+        return pasajesPrimeraClasePendientes;
+    }
+
+    public void setPasajesPrimeraClasePendientes(Cola<Pasaje> pasajesPrimeraClasePendientes) {
+        this.pasajesPrimeraClasePendientes = pasajesPrimeraClasePendientes;
+    }
+
+    public Cola<Pasaje> getPasajesEconomicosPendientes() {
+        return pasajesEconomicosPendientes;
+    }
+
+    public void setPasajesEconomicosPendientes(Cola<Pasaje> pasajesEconomicosPendientes) {
+        this.pasajesEconomicosPendientes = pasajesEconomicosPendientes;
+    }
+
+    public Lista<Pasaje> getPasajesDevueltos() {
+        return pasajesDevueltos;
+    }
+
+    public void setPasajesDevueltos(Lista<Pasaje> pasajesDevueltos) {
+        this.pasajesDevueltos = pasajesDevueltos;
+    }
+
 
     @Override
     public int compareTo(Vuelo o) {
@@ -105,21 +148,5 @@ public class Vuelo implements Comparable<Vuelo> {
                 ", mes=" + mes +
                 ", anio=" + anio +
                 '}';
-    }
-
-    public Lista<Pasaje> getPasajesEconomicos() {
-        return pasajesEconomicos;
-    }
-
-    public Lista<Pasaje> getPasajesPrimeraClase() {
-        return pasajesPrimeraClase;
-    }
-
-    public Lista<Pasaje> getPasajesDevueltos() {
-        return pasajesDevueltos;
-    }
-
-    public Cola<Pasaje> getPasajesPendientes() {
-        return pasajesPendientes;
     }
 }
