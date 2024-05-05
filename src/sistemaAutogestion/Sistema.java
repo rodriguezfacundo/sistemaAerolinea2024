@@ -110,8 +110,15 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno listarAerolineas() {
-            aerolineas.mostrar();
-            return Retorno.ok();
+            //aerolineas.mostrar();
+            Retorno ret = Retorno.ok();
+            Nodo<Aerolinea> aux = aerolineas.getInicio();
+            ret.valorString = "";
+            while(aux != null){
+                ret.valorString += aux.getDato().toString() + '\n';
+                aux = aux.getSiguiente();
+            }
+            return ret;
     }
 
     @Override
