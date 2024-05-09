@@ -1,35 +1,19 @@
 package dominio;
 
 public class Pasaje implements Comparable<Pasaje> {
-    private String pasaporteCliente;
-    private String codigoVuelo;
+    private Cliente cliente;
+    private Vuelo vuelo;
     private int categoriaPasaje;
 
-    public Pasaje(String pasaporteCliente, String codigoVuelo, int categoriaPasaje) {
-        this.pasaporteCliente = pasaporteCliente;
-        this.codigoVuelo = codigoVuelo;
+    public Pasaje(Cliente cliente, Vuelo vuelo, int categoriaPasaje) {
+        this.cliente = cliente;
+        this.vuelo = vuelo;
         this.categoriaPasaje = categoriaPasaje;
     }
 
     @Override
     public int compareTo(Pasaje o) {
         return 0;
-    }
-
-    public String getPasaporteCliente() {
-        return pasaporteCliente;
-    }
-
-    public void setPasaporteCliente(String pasaporteCliente) {
-        this.pasaporteCliente = pasaporteCliente;
-    }
-
-    public String getCodigoVuelo() {
-        return codigoVuelo;
-    }
-
-    public void setCodigoVuelo(String codigoVuelo) {
-        this.codigoVuelo = codigoVuelo;
     }
 
     public int getCategoriaPasaje() {
@@ -40,11 +24,27 @@ public class Pasaje implements Comparable<Pasaje> {
         this.categoriaPasaje = categoriaPasaje;
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Vuelo getVuelo() {
+        return vuelo;
+    }
+
+    public void setVuelo(Vuelo vuelo) {
+        this.vuelo = vuelo;
+    }
+
     @Override
     public String toString() {
         return "Pasaje{" +
-                "pasaporteCliente='" + pasaporteCliente + '\'' +
-                ", codigoVuelo='" + codigoVuelo + '\'' +
+                "cliente=" + cliente.getNombre() +
+                ", vuelo=" + vuelo.getCodigoVuelo() +
                 ", categoriaPasaje=" + categoriaPasaje +
                 '}';
     }

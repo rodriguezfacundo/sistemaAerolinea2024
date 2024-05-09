@@ -308,7 +308,11 @@ public class IObligatorioTest {
         precarga();
         Retorno r = miSistema.listarAerolineas();
         assertEquals(Retorno.ok().resultado,r.resultado);
-        prueba.ver(r.resultado, Retorno.ok().resultado, "Se listan todas las aerolineas del sistema");
+        assertEquals(   "Aerolinea{nombre='Aerolinea Iberia', pais='Espania', cantMaxAviones=36}\n" +
+                                "Aerolinea{nombre='Aerolinea Irlandesa', pais='Irlanda', cantMaxAviones=3}\n" +
+                                "Aerolinea{nombre='Aerolinea Splinter', pais='Italia', cantMaxAviones=12}\n" +
+                                "Aerolinea{nombre='Aerolinea Uruguaya', pais='Uruguay', cantMaxAviones=10}\n", r.valorString);
+        System.out.println(r.valorString);
     }
 
 
@@ -317,8 +321,10 @@ public class IObligatorioTest {
         precarga();
         Retorno r = miSistema.listarAvionesDeAerolinea("Aerolinea Irlandesa");
         assertEquals(Retorno.ok().resultado,r.resultado);
-        prueba.ver(r.resultado, Retorno.ok().resultado, "Se listan todos los aviones de la Aerolina Splinter");
-
+        assertEquals(   "Avion{codigo='FFF000', capacidadMax=45, nomAerolinea='Aerolinea Irlandesa'}\n" +
+                                "Avion{codigo='IFF123', capacidadMax=45, nomAerolinea='Aerolinea Irlandesa'}\n" +
+                                "Avion{codigo='SEC777', capacidadMax=45, nomAerolinea='Aerolinea Irlandesa'}\n", r.valorString);
+        System.out.println(r.valorString);
     }
     @Test
     public void testListarAvionesDeAerolineaError1() {

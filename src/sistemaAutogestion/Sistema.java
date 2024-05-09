@@ -57,7 +57,7 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno registrarAvion(String codigo, int capacidadMax, String nomAerolinea) {
-        Avion avion = new Avion(codigo, capacidadMax, nomAerolinea);
+        Avion avion = new Avion(codigo, capacidadMax);
         Nodo<Aerolinea> nodoAerolinea = this.aerolineas.obtenerElemento(new Aerolinea(nomAerolinea, "", 1));
         if(nodoAerolinea == null){
             return Retorno.error3();
@@ -69,6 +69,7 @@ public class Sistema implements IObligatorio {
             return Retorno.error4();
         } else{
             Aerolinea aerolinea = nodoAerolinea.getDato();
+            avion.setAerolinea(aerolinea);
             aerolinea.getAviones().agregarOrdenado(avion);
             return Retorno.ok();
         }
@@ -79,10 +80,10 @@ public class Sistema implements IObligatorio {
         Nodo<Aerolinea> nodoAerolinea = this.aerolineas.obtenerElemento(new Aerolinea(nomAerolinea, "", 1));
         if(nodoAerolinea == null){
             return Retorno.error1();
-        } else if(!nodoAerolinea.getDato().getAviones().estaElemento(new Avion(codAvion, 1, nomAerolinea))) {
+        } else if(!nodoAerolinea.getDato().getAviones().estaElemento(new Avion(codAvion, 1))) {
             return Retorno.error2();
         } else{
-            nodoAerolinea.getDato().getAviones().eliminarElemento(new Avion(codAvion, 1, nomAerolinea));
+            nodoAerolinea.getDato().getAviones().eliminarElemento(new Avion(codAvion, 1));
             return Retorno.ok();
         }
         //Faltaria validar el punto 3 que me parece que podemos hacerlo recien en la segunda entrega
@@ -110,21 +111,34 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno listarAerolineas() {
-            aerolineas.mostrar();
-            return Retorno.ok();
+            //aerolineas.mostrar();
+            Retorno ret = Retorno.ok();
+            Nodo<Aerolinea> aux = aerolineas.getInicio();
+            ret.valorString = "";
+            while(aux != null){
+                ret.valorString += aux.getDato().toString() + '\n';
+                aux = aux.getSiguiente();
+            }
+            return ret;
     }
 
     @Override
     public Retorno listarAvionesDeAerolinea(String nombre) {
+        Retorno ret = Retorno.ok();
         Nodo<Aerolinea> nodoAerolinea = this.aerolineas.obtenerElemento(new Aerolinea(nombre, "", 1));
+        ret.valorString = "";
         if (nodoAerolinea != null){
             Aerolinea aerolinea = nodoAerolinea.getDato();
             Lista<Avion> aviones = aerolinea.getAviones();
-            aviones.mostrar();
-            return Retorno.ok();
+            Nodo<Avion> aux = aviones.getInicio();
+            while(aux != null){
+                ret.valorString += aux.getDato().toString() + '\n';
+                aux = aux.getSiguiente();
+            }
         }else{
-            return Retorno.error1();
+            ret = Retorno.error1();
         }
+        return ret;
     }
 
     @Override
