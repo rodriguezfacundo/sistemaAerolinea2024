@@ -5,8 +5,8 @@ import tads.Lista;
 
 public class Vuelo implements Comparable<Vuelo> {
     private String codigoVuelo;
-    private String aerolinea;
-    private String codAvion;
+    private Aerolinea aerolinea;
+    private Avion avion;
     private String paisDestino;
     private int dia;
     private int mes;
@@ -20,8 +20,6 @@ public class Vuelo implements Comparable<Vuelo> {
 
     public Vuelo(String codigoVuelo, String aerolinea, String codAvion, String paisDestino, int dia, int mes, int anio, int cantPasajesEcon, int cantPasajesPClase) {
         this.codigoVuelo = codigoVuelo;
-        this.aerolinea = aerolinea;
-        this.codAvion = codAvion;
         this.paisDestino = paisDestino;
         this.dia = dia;
         this.mes = mes;
@@ -88,22 +86,6 @@ public class Vuelo implements Comparable<Vuelo> {
         this.codigoVuelo = codigoVuelo;
     }
 
-    public String getAerolinea() {
-        return aerolinea;
-    }
-
-    public void setAerolinea(String aerolinea) {
-        this.aerolinea = aerolinea;
-    }
-
-    public String getCodAvion() {
-        return codAvion;
-    }
-
-    public void setCodAvion(String codAvion) {
-        this.codAvion = codAvion;
-    }
-
     public String getPaisDestino() {
         return paisDestino;
     }
@@ -136,13 +118,28 @@ public class Vuelo implements Comparable<Vuelo> {
         this.anio = anio;
     }
 
+    public Aerolinea getAerolinea() {
+        return aerolinea;
+    }
+
+    public void setAerolinea(Aerolinea aerolinea) {
+        this.aerolinea = aerolinea;
+    }
+
+    public Avion getAvion() {
+        return avion;
+    }
+
+    public void setAvion(Avion avion) {
+        this.avion = avion;
+    }
 
     @Override
     public String toString() {
         return "Vuelo{" +
                 "codigoVuelo='" + codigoVuelo + '\'' +
-                ", aerolinea='" + aerolinea + '\'' +
-                ", codAvion='" + codAvion + '\'' +
+                ", aerolinea='" + aerolinea.getNombre() + '\'' +
+                ", codAvion='" + avion.getCodigo() + '\'' +
                 ", paisDestino='" + paisDestino + '\'' +
                 ", dia=" + dia +
                 ", mes=" + mes +

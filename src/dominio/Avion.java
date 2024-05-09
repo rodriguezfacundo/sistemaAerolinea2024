@@ -2,21 +2,26 @@ package dominio;
 public class Avion implements Comparable<Avion> {
     private String codigo;
     private int capacidadMax;
-    private String nomAerolinea;
+    private Aerolinea aerolinea;
 
     @Override
     public String toString() {
         return "Avion{" +
                 "codigo='" + codigo + '\'' +
                 ", capacidadMax=" + capacidadMax +
-                ", nomAerolinea='" + nomAerolinea + '\'' +
+                ", nomAerolinea='" + aerolinea.getNombre() + '\'' +
                 '}';
     }
 
-    public Avion(String codigo, int capacidadMax, String nomAerolinea) {
+    public Avion(String codigo, int capacidadMax, Aerolinea aerolinea) {
         this.codigo = codigo;
         this.capacidadMax = capacidadMax;
-        this.nomAerolinea = nomAerolinea;
+        this.aerolinea = aerolinea;
+    }
+
+    public Avion(String codigo, int capacidadMax) {
+        this.codigo = codigo;
+        this.capacidadMax = capacidadMax;
     }
 
     @Override
@@ -40,11 +45,11 @@ public class Avion implements Comparable<Avion> {
         this.capacidadMax = capacidadMax;
     }
 
-    public String getNomAerolinea() {
-        return nomAerolinea;
+    public Aerolinea getAerolinea() {
+        return this.aerolinea;
     }
 
-    public void setNomAerolinea(String nomAerolinea) {
-        this.nomAerolinea = nomAerolinea;
+    public void setAerolinea(Aerolinea a) {
+        this.aerolinea = a;
     }
 }
