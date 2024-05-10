@@ -16,23 +16,22 @@ public class Sistema implements IObligatorio {
         this.vuelos = new Lista<>();
     }
 
-
     @Override
     public Retorno crearSistemaDeAutogestion() {
         this.aerolineas = new Lista<>();
         this.clientes = new Lista<>();
         this.vuelos = new Lista<>();
-        return  Retorno.ok();
+        return Retorno.ok();
     }
 
     @Override
     public Retorno crearAerolinea(String nombre, String pais, int cantMaxAviones) {
         Aerolinea aerolinea = new Aerolinea(nombre, pais, cantMaxAviones);
-        if(this.aerolineas.estaElemento(aerolinea)){
+        if (this.aerolineas.estaElemento(aerolinea)) {
             return Retorno.error1();
-        } else if(cantMaxAviones <=0){
+        } else if (cantMaxAviones <= 0) {
             return Retorno.error2();
-        } else{
+        } else {
             aerolineas.agregarOrdenado(aerolinea);
             return Retorno.ok();
         }
@@ -41,14 +40,14 @@ public class Sistema implements IObligatorio {
     @Override
     public Retorno eliminarAerolinea(String nombre) {
         Nodo<Aerolinea> nodoAerolinea = this.aerolineas.obtenerElemento(new Aerolinea(nombre, "", 1));
-        if(nodoAerolinea == null){
+        if (nodoAerolinea == null) {
             return Retorno.error1();
-        } else{
+        } else {
             Aerolinea aerolinea = nodoAerolinea.getDato();
             Lista<Avion> avionesAerolinea = aerolinea.getAviones();
-            if(!avionesAerolinea.esVacia()){
+            if (!avionesAerolinea.esVacia()) {
                 return Retorno.error2();
-            } else{
+            } else {
                 this.aerolineas.eliminarElemento(aerolinea);
                 return Retorno.ok();
             }
@@ -59,15 +58,15 @@ public class Sistema implements IObligatorio {
     public Retorno registrarAvion(String codigo, int capacidadMax, String nomAerolinea) {
         Avion avion = new Avion(codigo, capacidadMax);
         Nodo<Aerolinea> nodoAerolinea = this.aerolineas.obtenerElemento(new Aerolinea(nomAerolinea, "", 1));
-        if(nodoAerolinea == null){
+        if (nodoAerolinea == null) {
             return Retorno.error3();
-        } else if(nodoAerolinea.getDato().getAviones().estaElemento(avion)){
+        } else if (nodoAerolinea.getDato().getAviones().estaElemento(avion)) {
             return Retorno.error1();
         } else if ((capacidadMax < 9) || (capacidadMax % 3 != 0)) {
             return Retorno.error2();
-        } else if(nodoAerolinea.getDato().getAviones().getCantMaxima() == nodoAerolinea.getDato().getAviones().cantidadElementos()){
+        } else if (nodoAerolinea.getDato().getAviones().getCantMaxima() == nodoAerolinea.getDato().getAviones().cantidadElementos()) {
             return Retorno.error4();
-        } else{
+        } else {
             Aerolinea aerolinea = nodoAerolinea.getDato();
             avion.setAerolinea(aerolinea);
             aerolinea.getAviones().agregarOrdenado(avion);
@@ -78,11 +77,11 @@ public class Sistema implements IObligatorio {
     @Override
     public Retorno eliminarAvion(String nomAerolinea, String codAvion) {
         Nodo<Aerolinea> nodoAerolinea = this.aerolineas.obtenerElemento(new Aerolinea(nomAerolinea, "", 1));
-        if(nodoAerolinea == null){
+        if (nodoAerolinea == null) {
             return Retorno.error1();
-        } else if(!nodoAerolinea.getDato().getAviones().estaElemento(new Avion(codAvion, 1))) {
+        } else if (!nodoAerolinea.getDato().getAviones().estaElemento(new Avion(codAvion, 1))) {
             return Retorno.error2();
-        } else{
+        } else {
             nodoAerolinea.getDato().getAviones().eliminarElemento(new Avion(codAvion, 1));
             return Retorno.ok();
         }
@@ -111,15 +110,20 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno listarAerolineas() {
-            //aerolineas.mostrar();
-            Retorno ret = Retorno.ok();
-            Nodo<Aerolinea> aux = aerolineas.getInicio();
-            ret.valorString = "";
-            while(aux != null){
+        //aerolineas.mostrar();
+        Retorno ret = Retorno.ok();
+        Nodo<Aerolinea> aux = aerolineas.getInicio();
+        ret.valorString = "";
+        while (aux != null) {
+            if (aux.getSiguiente() != null) {
                 ret.valorString += aux.getDato().toString() + '\n';
-                aux = aux.getSiguiente();
+            } else {
+                ret.valorString += aux.getDato().toString();
             }
-            return ret;
+            aux = aux.getSiguiente();
+
+        }
+        return ret;
     }
 
     @Override
@@ -127,15 +131,20 @@ public class Sistema implements IObligatorio {
         Retorno ret = Retorno.ok();
         Nodo<Aerolinea> nodoAerolinea = this.aerolineas.obtenerElemento(new Aerolinea(nombre, "", 1));
         ret.valorString = "";
-        if (nodoAerolinea != null){
+        if (nodoAerolinea != null) {
             Aerolinea aerolinea = nodoAerolinea.getDato();
             Lista<Avion> aviones = aerolinea.getAviones();
             Nodo<Avion> aux = aviones.getInicio();
-            while(aux != null){
-                ret.valorString += aux.getDato().toString() + '\n';
+            while (aux != null) {
+                if (aux.getSiguiente() != null) {
+                    ret.valorString += aux.getDato().toString() + '\n';
+                } else {
+                    ret.valorString += aux.getDato().toString();
+                }
                 aux = aux.getSiguiente();
+
             }
-        }else{
+        } else {
             ret = Retorno.error1();
         }
         return ret;

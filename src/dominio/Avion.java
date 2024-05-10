@@ -6,11 +6,7 @@ public class Avion implements Comparable<Avion> {
 
     @Override
     public String toString() {
-        return "Avion{" +
-                "codigo='" + codigo + '\'' +
-                ", capacidadMax=" + capacidadMax +
-                ", nomAerolinea='" + aerolinea.getNombre() + '\'' +
-                '}';
+        return codigo + '-' + capacidadMax + '|';
     }
 
     public Avion(String codigo, int capacidadMax, Aerolinea aerolinea) {
