@@ -594,6 +594,7 @@ public class IObligatorioTest {
         assertEquals("AA311-21|\nAA345-12|", r.valorString);
 
     }
+
     @Test
     public void testEliminarTodosLosAvionesYAgregarUnoNuevo() {
         // Crear una aerolínea y registrar algunos aviones
@@ -626,5 +627,58 @@ public class IObligatorioTest {
         r = miSistema.listarAvionesDeAerolinea("Aerolineas Argentinas");
         assertEquals("AA999-15|", r.valorString); // El avión AA999 se ha registrado correctamente
     }
+
+    @Test
+    public void testRegistrarAvionConNombreExistente() {
+        // Crear una aerolínea y registrar un avión
+        Retorno r = miSistema.crearAerolinea("Aerolinea Ejemplo", "País Ejemplo", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+        r = miSistema.registrarAvion("ABC123", 21, "Aerolinea Ejemplo");
+        assertEquals(Retorno.ok().resultado, r.resultado);
+
+        // Intentar registrar un avión con el mismo nombre que el avión anterior
+        r = miSistema.registrarAvion("ABC123", 18, "Aerolinea Ejemplo");
+        assertEquals(Retorno.error1().resultado, r.resultado); // Esperamos un error debido al nombre de avión duplicado
+
+        // Verificar que solo haya un avión registrado con ese nombre
+        r = miSistema.listarAvionesDeAerolinea("Aerolinea Ejemplo");
+        assertEquals("ABC123-21|", r.valorString); // Solo debe haber un avión registrado con el nombre "ABC123"
+    }
+
+    @Test
+    public void testEliminarAvionInexistente() {
+        // Crear una aerolínea y registrar algunos aviones
+        Retorno r = miSistema.crearAerolinea("Aerolinea Ejemplo", "País Ejemplo", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+        r = miSistema.registrarAvion("ABC123", 21, "Aerolinea Ejemplo");
+        assertEquals(Retorno.ok().resultado, r.resultado);
+
+        // Intentar eliminar un avión que no existe en la aerolínea
+        r = miSistema.eliminarAvion("Aerolinea Ejemplo", "XYZ789");
+        assertEquals(Retorno.error2().resultado, r.resultado); // Esperamos un error porque el avión no existe
+
+        // Verificar que el avión original aún esté registrado
+        r = miSistema.listarAvionesDeAerolinea("Aerolinea Ejemplo");
+        assertEquals("ABC123-21|", r.valorString); // El avión original debe seguir registrado
+    }
+
+    @Test
+    public void testEliminarAvionDeAerolineaInexistente() {
+        // Crear una aerolínea y registrar algunos aviones
+        Retorno r = miSistema.crearAerolinea("Aerolinea Ejemplo", "País Ejemplo", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+        r = miSistema.registrarAvion("ABC123", 21, "Aerolinea Ejemplo");
+        assertEquals(Retorno.ok().resultado, r.resultado);
+
+        // Intentar eliminar un avión de una aerolínea que no existe
+        r = miSistema.eliminarAvion("Aerolinea Inexistente", "ABC123");
+        assertEquals(Retorno.error1().resultado, r.resultado); // Esperamos un error porque la aerolínea no existe
+
+        // Verificar que el avión original aún esté registrado
+        r = miSistema.listarAvionesDeAerolinea("Aerolinea Ejemplo");
+        assertEquals("ABC123-21|", r.valorString); // El avión original debe seguir registrado
+    }
+
+   
 
 }
