@@ -4,6 +4,7 @@ import tads.Cola;
 import tads.Lista;
 
 public class Vuelo implements Comparable<Vuelo> {
+
     private String codigoVuelo;
     private Aerolinea aerolinea;
     private Avion avion;
@@ -72,7 +73,6 @@ public class Vuelo implements Comparable<Vuelo> {
         this.pasajesDevueltos = pasajesDevueltos;
     }
 
-
     @Override
     public int compareTo(Vuelo o) {
         return 0;
@@ -136,14 +136,72 @@ public class Vuelo implements Comparable<Vuelo> {
 
     @Override
     public String toString() {
-        return "Vuelo{" +
-                "codigoVuelo='" + codigoVuelo + '\'' +
-                ", aerolinea='" + aerolinea.getNombre() + '\'' +
-                ", codAvion='" + avion.getCodigo() + '\'' +
-                ", paisDestino='" + paisDestino + '\'' +
-                ", dia=" + dia +
-                ", mes=" + mes +
-                ", anio=" + anio +
-                '}';
+        return "Vuelo{"
+                + "codigoVuelo='" + codigoVuelo + '\''
+                + ", aerolinea='" + aerolinea.getNombre() + '\''
+                + ", codAvion='" + avion.getCodigo() + '\''
+                + ", paisDestino='" + paisDestino + '\''
+                + ", dia=" + dia
+                + ", mes=" + mes
+                + ", anio=" + anio
+                + '}';
+    }
+
+    public boolean disponibilidad(int categoriaPasaje) {
+        boolean r = false;
+        if (categoriaPasaje == 1) {
+            r = pasajesEconomicosEmitidos.cantidadElementos() < pasajesEconomicosEmitidos.getCantMaxima();
+        }
+        if (categoriaPasaje == 2) {
+            r = pasajesPrimeraClaseEmitidos.cantidadElementos() < pasajesPrimeraClaseEmitidos.getCantMaxima();
+        }
+        return r;
+    }
+
+    public void emitirPasaje(Pasaje p) {
+        if (p.getCategoriaPasaje() == 1) {
+            pasajesEconomicosEmitidos.agregarInicio(p);
+        } else if (p.getCategoriaPasaje() == 2) {
+            pasajesPrimeraClaseEmitidos.agregarInicio(p);
+        }
+    }
+
+    public void dejarPendiente(Pasaje p) {
+        if (p.getCategoriaPasaje() == 1) {
+            pasajesEconomicosPendientes.encolar(p);
+        } else if (p.getCategoriaPasaje() == 2) {
+            pasajesPrimeraClasePendientes.encolar(p);
+        }
+    }
+
+    public Pasaje obtenerCompra(Cliente c) {
+        
+        Pasaje p = new Pasaje(c, this, 2);
+        if (pasajesPrimeraClaseEmitidos.estaElemento(p)) {
+            return pasajesPrimeraClaseEmitidos.obtenerElemento(p).getDato();
+        }
+        p = new Pasaje(c, this, 1);
+        if (pasajesEconomicosEmitidos.estaElemento(p)) {
+            return pasajesEconomicosEmitidos.obtenerElemento(p).getDato();
+        }
+
+        return null;
+    }
+
+    public void devolver(Pasaje p) {
+        if(p.getCategoriaPasaje() == 1){
+            pasajesPrimeraClaseEmitidos.eliminarElemento(p);//Se realiza la devolución del pasaje comprado anteriormente por el cliente. 
+            
+            Pasaje pasajeEnEspera = pasajesPrimeraClasePendientes.frente().getDato();
+            pasajesPrimeraClaseEmitidos.agregarOrdenado(pasajeEnEspera); //En caso de existir clientes en lista de espera, se le otorgará el pasaje al primero de la lista.
+            pasajesPrimeraClasePendientes.desencolar();
+            
+        }else if(p.getCategoriaPasaje() == 2){
+            pasajesEconomicosEmitidos.eliminarElemento(p);
+            Pasaje pasajeEnEspera = pasajesEconomicosPendientes.frente().getDato();
+            pasajesEconomicosEmitidos.agregarOrdenado(pasajeEnEspera);
+            pasajesEconomicosPendientes.desencolar();
+        }
+        
     }
 }

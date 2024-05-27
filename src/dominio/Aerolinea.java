@@ -47,11 +47,7 @@ public class Aerolinea implements Comparable<Aerolinea> {
 
     @Override
     public String toString() {
-        return "Aerolinea{" +
-                "nombre='" + nombre + '\'' +
-                ", pais='" + pais + '\'' +
-                ", cantMaxAviones=" + aviones.getCantMaxima() +
-                '}';
+        return nombre +'-'+ pais + '-' + aviones.getCantMaxima() +'|';
     }
 
 }
