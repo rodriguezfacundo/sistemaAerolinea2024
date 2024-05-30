@@ -29,7 +29,7 @@ public class Vuelo implements Comparable<Vuelo> {
         this.pasajesPrimeraClaseEmitidos = new Lista<>(cantPasajesPClase);
         this.pasajesEconomicosPendientes = new Cola<>();
         this.pasajesPrimeraClasePendientes = new Cola<>();
-        this.clientesEnEspera = new Cola<>();
+        this.clientesEnEspera = new Cola<>(); //todo: ver para que es esto
         this.pasajesDevueltos = new Lista<>();
     }
 
@@ -133,18 +133,21 @@ public class Vuelo implements Comparable<Vuelo> {
     public void setAvion(Avion avion) {
         this.avion = avion;
     }
+    
+    public int cantDisponible(){
+        int cantidad = pasajesEconomicosEmitidos.getCantMaxima() - pasajesEconomicosEmitidos.cantidadElementos();
+        cantidad += pasajesPrimeraClaseEmitidos.getCantMaxima() - pasajesPrimeraClaseEmitidos.cantidadElementos();
+        return cantidad;
+    }
 
     @Override
     public String toString() {
-        return "Vuelo{"
-                + "codigoVuelo='" + codigoVuelo + '\''
-                + ", aerolinea='" + aerolinea.getNombre() + '\''
-                + ", codAvion='" + avion.getCodigo() + '\''
-                + ", paisDestino='" + paisDestino + '\''
-                + ", dia=" + dia
-                + ", mes=" + mes
-                + ", anio=" + anio
-                + '}';
+        return  codigoVuelo + '-'
+                + aerolinea.getNombre() + '-'
+                + avion.getCodigo() + '-'
+                + pasajesEconomicosEmitidos.cantidadElementos()+ '-'
+                + pasajesPrimeraClaseEmitidos.cantidadElementos() + '-'
+                + cantDisponible() +'|';
     }
 
     public boolean disponibilidad(int categoriaPasaje) {
@@ -164,6 +167,7 @@ public class Vuelo implements Comparable<Vuelo> {
         } else if (p.getCategoriaPasaje() == 2) {
             pasajesPrimeraClaseEmitidos.agregarInicio(p);
         }
+        p.getCliente().agregarCompra(p);
     }
 
     public void dejarPendiente(Pasaje p) {
@@ -202,6 +206,8 @@ public class Vuelo implements Comparable<Vuelo> {
             pasajesEconomicosEmitidos.agregarOrdenado(pasajeEnEspera);
             pasajesEconomicosPendientes.desencolar();
         }
+        p.getCliente().devolverPasaje(p);//se agrega a la lista de devueltos del Cliente
+        
         
     }
 }

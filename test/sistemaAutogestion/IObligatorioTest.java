@@ -205,7 +205,7 @@ public class IObligatorioTest {
         r = miSistema.registrarAvion("333UVA", 45, "Aerolinea Splinter");
         assertEquals(Retorno.ok().resultado, r.resultado);
         
-        //eliminar todo los aviones y registrar uno nuevo
+        //eliminar todos los aviones y registrar uno nuevo
         r = miSistema.crearAerolinea("Aerolineas Argentinas", "Argentina", 10);
         assertEquals(Retorno.ok().resultado, r.resultado);
         r = miSistema.registrarAvion("AA001", 12, "Aerolineas Argentinas");

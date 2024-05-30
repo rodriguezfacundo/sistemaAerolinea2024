@@ -3,23 +3,24 @@ package sistemaAutogestion;
 import dominio.*;
 import tads.Lista;
 import tads.Nodo;
+import tads.Pila;
 
 public class Sistema implements IObligatorio {
 
     private Lista<Aerolinea> aerolineas;
-    private Lista<Cliente> clientes; //Para segunda entrega se cambiara a Pila
+    private Pila<Cliente> clientes;
     private Lista<Vuelo> vuelos;
 
     public Sistema() {
         this.aerolineas = new Lista<>();
-        this.clientes = new Lista<>();
+        this.clientes = new Pila<>(300);
         this.vuelos = new Lista<>();
     }
 
     @Override
     public Retorno crearSistemaDeAutogestion() {
         this.aerolineas = new Lista<>();
-        this.clientes = new Lista<>();
+        this.clientes = new Pila<>(300);
         this.vuelos = new Lista<>();
         return Retorno.ok();
     }
@@ -92,20 +93,27 @@ public class Sistema implements IObligatorio {
     public Retorno registrarCliente(String pasaporte, String nombre, int edad) {
         if (edad < 0) {
             return Retorno.error1();
-        } else if (pasaporte.length() != 7) { //ToDo Es con regex?
+        } else if (pasaporte.length() != 7) { //ToDo: Preguntar ...Es con regex?
             return Retorno.error2();
         }
         Cliente nuevo = new Cliente(pasaporte, nombre, edad);
-        if (clientes.estaElemento(nuevo)) {
+        if (clientes.existeElemento(nuevo)) {
             return Retorno.error3();
         }
-        clientes.agregarInicio(nuevo);
+        clientes.apilar(nuevo);
         return Retorno.ok();
     }
 
     @Override
     public Retorno crearVuelo(String codigoVuelo, String aerolinea, String codAvion, String paisDestino, int dia, int mes, int anio, int cantPasajesEcon, int cantPasajesPClase) {
 
+        if (cantPasajesEcon % 3 != 0 || cantPasajesPClase % 3 != 0) {
+            // error 5 – En caso de que las cantidades de pasajes (de cualquiera de las categorías) no sea
+            // múltiplo de 3.
+            return Retorno.error5();
+        } else if (cantPasajesEcon < 3 || cantPasajesPClase < 3) {
+            return Retorno.error6();// 6 - En caso de que la suma de los pasajes de ambas categorías supere la cant. máxima permitida por el avión.
+        }
         Vuelo nuevo = new Vuelo(codigoVuelo, aerolinea, codAvion, paisDestino, dia, mes, anio, cantPasajesEcon, cantPasajesPClase);
         Aerolinea aero = aerolineas.obtenerElemento(new Aerolinea(aerolinea, " ", 0)).getDato();
         Avion avion = aero.getAviones().obtenerElemento(new Avion(codAvion, 0, aero)).getDato();
@@ -116,20 +124,10 @@ public class Sistema implements IObligatorio {
             return Retorno.error2();
         } else if (avion == null) { // 3.- En caso de que el código de avión no exista dentro de la aerolínea.
             return Retorno.error3();
+        } else if (avion.disponibilidad(dia, mes, anio)) {
+            return Retorno.error4();// 4 - En caso de que ya exista un vuelo creado para ese avión en dicha fecha.
         }
 
-        // 4 - En caso de que ya exista un vuelo creado para ese avión en dicha fecha.
-        //ToDo
-        // 5 – En caso de que las cantidades de pasajes (de cualquiera de las categorías) no sea
-        // múltiplo de 3.
-        if (cantPasajesEcon % 3 != 0 || cantPasajesPClase % 3 != 0) {
-            return Retorno.error5();
-        }
-
-        if (cantPasajesEcon < 3 || cantPasajesPClase < 3) {
-            return Retorno.error6();
-        }
-        // 6 - En caso de que la suma de los pasajes de ambas categorías supere la cant. máxima permitida por el avión.
         if (cantPasajesPClase + cantPasajesEcon > avion.getCapacidadMax()) {
             return Retorno.error6();
         } else {
@@ -146,21 +144,20 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno comprarPasaje(String pasaporteCliente, String codigoVuelo, int categoríaPasaje) {
-        
+
         Cliente c = new Cliente(pasaporteCliente, "", 0);
-        if(!clientes.estaElemento(c)){
+        if (!clientes.existeElemento(c)) {
             return Retorno.error1();
         }
-        
+
         Vuelo v = new Vuelo(codigoVuelo, "", "", "", 0, 0, 0, 0, 0);
-        if(!vuelos.estaElemento(v)){
+        if (!vuelos.estaElemento(v)) {
             return Retorno.error2();
         }
-        
-        c = clientes.obtenerElemento(c).getDato();
+
+        c = clientes.ObtenerElemento(c).getDato();
         v = vuelos.obtenerElemento(v).getDato();
-        
-        
+
         Pasaje p = new Pasaje(c, v, categoríaPasaje);
         if (v.disponibilidad(categoríaPasaje)) {//  En caso de existir disponibilidad para dicha categoría (1-económica, 2-Primera Clase),
             v.emitirPasaje(p);//  se emite el pasaje para dicho cliente.
@@ -173,29 +170,24 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno devolverPasaje(String pasaporteCliente, String codigoVuelo) {
-        Cliente c  = new Cliente (pasaporteCliente,"",0);
-        if(!clientes.estaElemento(c)){
+        Cliente c = new Cliente(pasaporteCliente, "", 0);
+        if (!clientes.existeElemento(c)) {
             return Retorno.error1();//error1.- En caso de que exista el pasaporte del cliente
         }
         Vuelo v = new Vuelo(codigoVuelo, "", "", "", 0, 0, 0, 0, 0);
-        if(!vuelos.estaElemento(v)){
+        if (!vuelos.estaElemento(v)) {
             return Retorno.error2();// error 2.- En caso de que no exista el código de vuelo
         }
-        
-        c = clientes.obtenerElemento(c).getDato();
+
+        c = clientes.ObtenerElemento(c).getDato();
         v = vuelos.obtenerElemento(v).getDato();
-        
-        if(v.obtenerCompra(c)==null){
+
+        if (v.obtenerCompra(c) == null) {
             return Retorno.error3();// error 3 – En caso de que no exista una compra del cliente para dicho vuelo
-        } 
+        }
         Pasaje p = v.obtenerCompra(c);
         v.devolver(p);//Se realiza la devolución del pasaje comprado anteriormente por el cliente. 
         return Retorno.ok();
-        
-//En caso de existir clientes en lista de
-//espera, se le otorgará el pasaje al primero de la lista.
-
-
 
     }
 
@@ -233,7 +225,6 @@ public class Sistema implements IObligatorio {
                     ret.valorString += aux.getDato().toString();
                 }
                 aux = aux.getSiguiente();
-
             }
         } else {
             ret = Retorno.error1();
@@ -243,17 +234,29 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno listarClientes() {
-        return null;
+        return Retorno.ok(clientes.imprimirPila());
     }
 
     @Override
     public Retorno listarVuelos() {
-        return null;
+        Retorno ret = Retorno.ok("");
+        Nodo<Vuelo> aux = vuelos.getInicio();
+        while (aux != null) {
+            if (aux.getSiguiente() != null) {
+                ret.valorString += aux.getDato().toString() + '\n';
+            } else {
+                ret.valorString += aux.getDato().toString();
+            }
+            aux = aux.getSiguiente();
+        }
+        return ret;
     }
 
     @Override
     public Retorno vuelosDeCliente(String pasaporte) {
-        return null;
+        Retorno ret = Retorno.ok("");
+        
+        return ret;
     }
 
     @Override

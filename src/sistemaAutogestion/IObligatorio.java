@@ -12,7 +12,8 @@ public interface IObligatorio {
     //pre: no debe ingresar parametros
     //post: : Crea la estructura necesaria para representar el sistema de Gestión.
     public Retorno crearSistemaDeAutogestion();
-
+    //todo: ser mas especifico con las pre condiciones. poner que es lo que no controlo 
+    
     //pre: recibe un nombre, pais, y cantMaxAviones
     //post: : Registra la aerolínea, especificando la cantidad máxima de aviones que puede gestionar.
     //Devuelve ok si pudo registrar la aerolinea

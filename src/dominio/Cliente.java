@@ -2,13 +2,13 @@ package dominio;
 
 import tads.Lista;
 
-import java.util.List;
 
 public class Cliente implements Comparable<Cliente> {
     private String pasaporte;
     private String nombre;
     private int edad;
-    private Lista<Pasaje> pasajes;//tal vez cambiemos a pila en un futuro
+    private Lista<Pasaje> pasajesComprados;//tal vez cambiemos a pila en un futuro
+    private Lista<Pasaje> pasajesDevueltos;
 
     @Override
     public String toString() {
@@ -23,7 +23,8 @@ public class Cliente implements Comparable<Cliente> {
         this.pasaporte = pasaporte;
         this.nombre = nombre;
         this.edad = edad;
-        this.pasajes = new Lista<>();
+        this.pasajesComprados = new Lista<>();
+        this.pasajesDevueltos = new Lista<>();
     }
 
     @Override
@@ -55,11 +56,19 @@ public class Cliente implements Comparable<Cliente> {
         this.edad = edad;
     }
 
-    public Lista<Pasaje> getPasajes() {
-        return pasajes;
+    public Lista<Pasaje> getPasajesDevueltos() {
+        return pasajesDevueltos;
     }
 
-    public void setPasajes(Lista<Pasaje> pasajes) {
-        this.pasajes = pasajes;
+    public void setPasajesDevueltos(Lista<Pasaje> pasajes) {
+        this.pasajesDevueltos = pasajes;
+    }
+    
+    public void devolverPasaje(Pasaje p) {
+        pasajesDevueltos.agregarFinal(p);
+    }
+
+    void agregarCompra(Pasaje p) {
+        pasajesComprados.agregarFinal(p);
     }
 }

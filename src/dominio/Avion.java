@@ -1,9 +1,12 @@
 package dominio;
+
+import tads.ListaVuelo;
+
 public class Avion implements Comparable<Avion> {
     private String codigo;
     private int capacidadMax;
     private Aerolinea aerolinea;
-
+    private ListaVuelo<Vuelo> vuelos = new ListaVuelo<>();
     
     public Avion(String codigo, int capacidadMax, Aerolinea aerolinea) {
         this.codigo = codigo;
@@ -48,5 +51,13 @@ public class Avion implements Comparable<Avion> {
     public String toString() {
         return codigo + '-' + capacidadMax + '|';
     }
+
+    public boolean disponibilidad(int dia, int mes, int anio) {
+        boolean r = true;
+        if(vuelos.obtenerPorFecha(dia,mes,anio)!= null) return false;
+        return r;
+    }
+    
+    
 
 }
