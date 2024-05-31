@@ -19,12 +19,14 @@ public class Vuelo implements Comparable<Vuelo> {
     private Cola<Cliente> clientesEnEspera;
     private Lista<Pasaje> pasajesDevueltos;
 
-    public Vuelo(String codigoVuelo, String aerolinea, String codAvion, String paisDestino, int dia, int mes, int anio, int cantPasajesEcon, int cantPasajesPClase) {
+    public Vuelo(String codigoVuelo, Aerolinea aerolinea, Avion avion, String paisDestino, int dia, int mes, int anio, int cantPasajesEcon, int cantPasajesPClase) {
         this.codigoVuelo = codigoVuelo;
         this.paisDestino = paisDestino;
         this.dia = dia;
         this.mes = mes;
         this.anio = anio;
+        this.aerolinea = aerolinea;
+        this.avion = avion;
         this.pasajesEconomicosEmitidos = new Lista<>(cantPasajesEcon);
         this.pasajesPrimeraClaseEmitidos = new Lista<>(cantPasajesPClase);
         this.pasajesEconomicosPendientes = new Cola<>();

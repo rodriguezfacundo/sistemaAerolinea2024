@@ -59,6 +59,10 @@ public class Cliente implements Comparable<Cliente> {
     public Lista<Pasaje> getPasajesDevueltos() {
         return pasajesDevueltos;
     }
+    
+    public Lista<Pasaje> getPasajesComprados(){
+        return this.pasajesComprados;
+    }
 
     public void setPasajesDevueltos(Lista<Pasaje> pasajes) {
         this.pasajesDevueltos = pasajes;

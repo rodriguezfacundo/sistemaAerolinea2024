@@ -1,16 +1,19 @@
 package dominio;
 
+import tads.Cola;
 import tads.Lista;
 
 public class Aerolinea implements Comparable<Aerolinea> {
     private String nombre;
     private String pais;
     private Lista<Avion> aviones;
+    private Cola<Pasaje> pasajesDevueltos;
 
     public Aerolinea(String nombre, String pais, int cantMaxAviones) {
         this.nombre = nombre;
         this.pais = pais;
         this.aviones = new Lista<>(cantMaxAviones);
+        this.pasajesDevueltos = new Cola<>();
     }
 
 

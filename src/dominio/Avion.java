@@ -7,16 +7,26 @@ public class Avion implements Comparable<Avion> {
     private int capacidadMax;
     private Aerolinea aerolinea;
     private ListaVuelo<Vuelo> vuelos = new ListaVuelo<>();
-    
-    public Avion(String codigo, int capacidadMax, Aerolinea aerolinea) {
+    private boolean tieneViajeVendido;
+
+     public Avion(String codigo, int capacidadMax, Aerolinea aerolinea) {
         this.codigo = codigo;
         this.capacidadMax = capacidadMax;
         this.aerolinea = aerolinea;
+        this.tieneViajeVendido = false;
     }
 
     public Avion(String codigo, int capacidadMax) {
         this.codigo = codigo;
         this.capacidadMax = capacidadMax;
+    }
+    
+    public boolean isTieneViajeVendido() {
+        return tieneViajeVendido;
+    }
+
+    public void setTieneViajeVendido(boolean tieneViajeVendido) {
+        this.tieneViajeVendido = tieneViajeVendido;
     }
 
     @Override
@@ -51,10 +61,14 @@ public class Avion implements Comparable<Avion> {
     public String toString() {
         return codigo + '-' + capacidadMax + '|';
     }
+    
+    public ListaVuelo<Vuelo> getVuelos() {
+        return vuelos;
+    }
 
     public boolean disponibilidad(int dia, int mes, int anio) {
         boolean r = true;
-        if(vuelos.obtenerPorFecha(dia,mes,anio)!= null) return false;
+        if(this.vuelos.obtenerPorFecha(dia,mes,anio)!= null) return false;
         return r;
     }
     

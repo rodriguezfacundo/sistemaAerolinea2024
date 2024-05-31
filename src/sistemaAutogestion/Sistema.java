@@ -80,13 +80,18 @@ public class Sistema implements IObligatorio {
         Nodo<Aerolinea> nodoAerolinea = this.aerolineas.obtenerElemento(new Aerolinea(nomAerolinea, "", 1));
         if (nodoAerolinea == null) {
             return Retorno.error1();
-        } else if (!nodoAerolinea.getDato().getAviones().estaElemento(new Avion(codAvion, 1))) {
+        }
+        Avion avion = nodoAerolinea.getDato().getAviones().obtenerElemento(new Avion(codAvion, 1)).getDato();
+        if (avion == null) {
             return Retorno.error2();
-        } else {
+        }
+        if(avion.isTieneViajeVendido()){
+            return Retorno.error3();
+        }
+        else {
             nodoAerolinea.getDato().getAviones().eliminarElemento(new Avion(codAvion, 1));
             return Retorno.ok();
         }
-        //Faltaria validar el punto 3 que me parece que podemos hacerlo recien en la segunda entrega
     }
 
     @Override
@@ -106,89 +111,75 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno crearVuelo(String codigoVuelo, String aerolinea, String codAvion, String paisDestino, int dia, int mes, int anio, int cantPasajesEcon, int cantPasajesPClase) {
-
-        if (cantPasajesEcon % 3 != 0 || cantPasajesPClase % 3 != 0) {
-            // error 5 – En caso de que las cantidades de pasajes (de cualquiera de las categorías) no sea
-            // múltiplo de 3.
-            return Retorno.error5();
-        } else if (cantPasajesEcon < 3 || cantPasajesPClase < 3) {
-            return Retorno.error6();// 6 - En caso de que la suma de los pasajes de ambas categorías supere la cant. máxima permitida por el avión.
-        }
-        Vuelo nuevo = new Vuelo(codigoVuelo, aerolinea, codAvion, paisDestino, dia, mes, anio, cantPasajesEcon, cantPasajesPClase);
         Aerolinea aero = aerolineas.obtenerElemento(new Aerolinea(aerolinea, " ", 0)).getDato();
         Avion avion = aero.getAviones().obtenerElemento(new Avion(codAvion, 0, aero)).getDato();
 
-        if (vuelos.estaElemento(nuevo)) {    // 1.- En caso de que ya exista el código de vuelo en el sistema
-            return Retorno.error1();
-        } else if (aero == null) { // 2. - En caso de que la aerolínea no exista en el sistema.
-            return Retorno.error2();
-        } else if (avion == null) { // 3.- En caso de que el código de avión no exista dentro de la aerolínea.
-            return Retorno.error3();
-        } else if (avion.disponibilidad(dia, mes, anio)) {
-            return Retorno.error4();// 4 - En caso de que ya exista un vuelo creado para ese avión en dicha fecha.
+        if(aero == null){
+             return Retorno.error2();
         }
-
-        if (cantPasajesPClase + cantPasajesEcon > avion.getCapacidadMax()) {
+        if(avion == null){
+            return Retorno.error3();
+        }
+        if (cantPasajesEcon % 3 != 0 || cantPasajesPClase % 3 != 0) {
+            return Retorno.error5();
+        }  
+        if( cantPasajesPClase + cantPasajesEcon > avion.getCapacidadMax()){
             return Retorno.error6();
-        } else {
-            vuelos.agregarFinal(nuevo);
+        }
+        if (avion.disponibilidad(dia, mes, anio)) {
+            return Retorno.error4();
+        }
+        Vuelo nuevoVuelo = new Vuelo(codigoVuelo, aero, avion, paisDestino, dia, mes, anio, cantPasajesEcon, cantPasajesPClase);
+        if (vuelos.estaElemento(nuevoVuelo)) {
+            return Retorno.error1();
+        } 
+         else {
+            vuelos.agregarFinal(nuevoVuelo);
+            avion.getVuelos().agregarFinal(nuevoVuelo);
             return Retorno.ok();
         }
-        //Descripción: Se crea el vuelo en el sistema. Todos los vuelos salen en un único horario 
-        //(no será necesario verificar la correctitud de la fecha ingresada).
-        //Se deberá indicar cuantos pasajes de categoría económica (tipo 1) y cuantos de primera clase (tipo 2) se ponen a la venta.
-        //Las cantidades de cada categoría de pasaje debe ser >=3 y múltiplo de 3.
-        //En caso de que la suma de la cantidad de pasajes de ambas categorías no cubra el total
-        //de pasajes disponibles, se completará el vuelo con pasajes de categoría económica hasta cubrir el total de capacidad del avión.
     }
 
     @Override
     public Retorno comprarPasaje(String pasaporteCliente, String codigoVuelo, int categoríaPasaje) {
 
-        Cliente c = new Cliente(pasaporteCliente, "", 0);
-        if (!clientes.existeElemento(c)) {
+        Cliente cliente = this.clientes.ObtenerElemento(new Cliente(pasaporteCliente, "", 0)).getDato();
+        Vuelo vuelo = new Vuelo(codigoVuelo, null, null, "", 0, 0, 0, 0, 0);
+        if (!clientes.existeElemento(cliente)) {
             return Retorno.error1();
         }
-
-        Vuelo v = new Vuelo(codigoVuelo, "", "", "", 0, 0, 0, 0, 0);
-        if (!vuelos.estaElemento(v)) {
+        if (!vuelos.estaElemento(vuelo)) {
             return Retorno.error2();
         }
-
-        c = clientes.ObtenerElemento(c).getDato();
-        v = vuelos.obtenerElemento(v).getDato();
-
-        Pasaje p = new Pasaje(c, v, categoríaPasaje);
-        if (v.disponibilidad(categoríaPasaje)) {//  En caso de existir disponibilidad para dicha categoría (1-económica, 2-Primera Clase),
-            v.emitirPasaje(p);//  se emite el pasaje para dicho cliente.
+        Pasaje pasaje = new Pasaje(cliente, vuelo, categoríaPasaje);
+        if (vuelo.disponibilidad(categoríaPasaje)) {
+            vuelo.emitirPasaje(pasaje);
+            cliente.getPasajesComprados().agregarFinal(pasaje);
+            vuelo.getAvion().setTieneViajeVendido(true);
             return Retorno.ok();
         } else {
-            v.dejarPendiente(p);  //En caso de no existir disponibilidad para la categoría seleccionada, la emisión del pasaje quedará en estado pendiente 
+            vuelo.dejarPendiente(pasaje);
             return Retorno.ok();
         }
     }
 
     @Override
     public Retorno devolverPasaje(String pasaporteCliente, String codigoVuelo) {
-        Cliente c = new Cliente(pasaporteCliente, "", 0);
-        if (!clientes.existeElemento(c)) {
-            return Retorno.error1();//error1.- En caso de que exista el pasaporte del cliente
+        Cliente cliente = this.clientes.ObtenerElemento(new Cliente(pasaporteCliente, "", 0)).getDato();
+        if (cliente == null) {
+            return Retorno.error1();
         }
-        Vuelo v = new Vuelo(codigoVuelo, "", "", "", 0, 0, 0, 0, 0);
-        if (!vuelos.estaElemento(v)) {
-            return Retorno.error2();// error 2.- En caso de que no exista el código de vuelo
+        Vuelo vuelo = this.vuelos.obtenerElemento(new Vuelo(codigoVuelo, null,null, "", 0, 0, 0, 0, 0)).getDato();
+        if (vuelo == null) {
+            return Retorno.error2();
         }
-
-        c = clientes.ObtenerElemento(c).getDato();
-        v = vuelos.obtenerElemento(v).getDato();
-
-        if (v.obtenerCompra(c) == null) {
+        Pasaje pasaje = vuelo.obtenerCompra(cliente);
+        if (pasaje == null) {
             return Retorno.error3();// error 3 – En caso de que no exista una compra del cliente para dicho vuelo
+        } else{
+             vuelo.devolver(pasaje);//Se realiza la devolución del pasaje comprado anteriormente por el cliente. 
+            return Retorno.ok();   
         }
-        Pasaje p = v.obtenerCompra(c);
-        v.devolver(p);//Se realiza la devolución del pasaje comprado anteriormente por el cliente. 
-        return Retorno.ok();
-
     }
 
     @Override
