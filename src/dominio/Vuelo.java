@@ -237,7 +237,6 @@ public class Vuelo implements Comparable<Vuelo> {
             }
             p.getVuelo().getAerolinea().getPasajesDevueltos().agregarInicio(p);
         }
-        p.getCliente().devolverPasaje(p);//se agrega a la lista de devueltos del Cliente
     }
     
 }

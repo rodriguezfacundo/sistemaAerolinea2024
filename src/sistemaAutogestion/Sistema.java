@@ -127,6 +127,12 @@ public class Sistema implements IObligatorio {
         if( cantPasajesPClase + cantPasajesEcon > avion.getCapacidadMax()){
             return Retorno.error6();
         }
+        //  la suma de la cantidad de pasajes de ambas categorías no cubra el total de pasajes disponibles, se completará el vuelo con pasajes de categoría
+        //económica hasta cubrir el total de capacidad del avión
+        if (cantPasajesPClase + cantPasajesEcon < avion.getCapacidadMax()) {
+            int diferencia = avion.getCapacidadMax() - (cantPasajesPClase + cantPasajesEcon);
+            cantPasajesEcon += diferencia;
+        }
         Vuelo nuevoVuelo = new Vuelo(codigoVuelo, aerolineaElegida, avion, paisDestino, dia, mes, anio, cantPasajesEcon, cantPasajesPClase);
         if (vuelos.obtenerElemento(nuevoVuelo) != null) {
             return Retorno.error1();
@@ -286,6 +292,59 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno vistaDeVuelo(String codigoVuelo) {
-        return null;
+        Nodo<Vuelo> nodoVuelo = this.vuelos.obtenerElemento(new Vuelo(codigoVuelo, null, null, "", 0, 0, 0, 0, 0));
+        Vuelo vuelo = nodoVuelo.getDato();
+        StringBuilder sb = new StringBuilder();
+
+        // Matrices para los asientos
+        String[][] primeraClase = generarMatriz(vuelo.getPasajesPrimeraClaseEmitidos(), vuelo.getPasajesPrimeraClaseEmitidos().getCantMaxima());
+        String[][] economica = generarMatriz(vuelo.getPasajesEconomicosEmitidos(), vuelo.getPasajesEconomicosEmitidos().getCantMaxima());
+
+        sb.append("**********************************\n")
+          .append("           * PRIMERA *\n")
+          .append("**********************************\n");
+
+        formatearMatriz(primeraClase, sb);
+
+        sb.append("**********************************\n")
+          .append("          * ECONÓMICA *\n")
+          .append("**********************************\n");
+
+        formatearMatriz(economica, sb);
+
+        sb.append("**********************************\n");
+
+        return new Retorno(Retorno.Resultado.OK, sb.toString());
+    }
+    
+    private String[][] generarMatriz(Lista<Pasaje> pasajes, int capacidad) {
+        int filas = (capacidad + 2) / 3;
+        String[][] matriz = new String[filas][3];
+
+        Nodo<Pasaje> nodoPasaje = pasajes.getInicio();
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (nodoPasaje != null) {
+                    matriz[i][j] = nodoPasaje.getDato().getCliente().getPasaporte();
+                    nodoPasaje = nodoPasaje.getSiguiente();
+                } else {
+                    matriz[i][j] = "XXXXXXXX";
+                }
+            }
+        }
+        return matriz;
+    }
+    
+    private void formatearMatriz(String[][] matriz, StringBuilder sb) {
+       for (int i = 0; i < matriz.length; i++) {
+            sb.append(" * ");
+            for (String asiento : matriz[i]) {
+                sb.append(asiento).append(" * ");
+            }
+            sb.append("\n");
+            if (i < matriz.length - 1) {
+                sb.append("**********************************\n");
+            }
+        }
     }
 }

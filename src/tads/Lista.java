@@ -177,6 +177,8 @@ public class Lista<T extends Comparable<T>> implements ILista<T> {
     public String mostrarRecString(Nodo<T> actual) {
         if (actual == null) {
             return "";
+        } else if (actual.getSiguiente() == null) {
+            return actual.getDato().toString();
         } else {
             return actual.getDato().toString() + '\n' + mostrarRecString(actual.getSiguiente());
         }

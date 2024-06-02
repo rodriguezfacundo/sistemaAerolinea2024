@@ -8,7 +8,6 @@ public class Cliente implements Comparable<Cliente> {
     private String nombre;
     private int edad;
     private Lista<Pasaje> pasajesComprados;
-    private Lista<Pasaje> pasajesDevueltos;
 
     @Override
     public String toString() {
@@ -20,7 +19,6 @@ public class Cliente implements Comparable<Cliente> {
         this.nombre = nombre;
         this.edad = edad;
         this.pasajesComprados = new Lista<>();
-        this.pasajesDevueltos = new Lista<>();
     }
 
     @Override
@@ -62,20 +60,8 @@ public class Cliente implements Comparable<Cliente> {
         this.edad = edad;
     }
 
-    public Lista<Pasaje> getPasajesDevueltos() {
-        return this.pasajesDevueltos;
-    }
-    
     public Lista<Pasaje> getPasajesComprados(){
         return this.pasajesComprados;
-    }
-
-    public void setPasajesDevueltos(Lista<Pasaje> pasajes) {
-        this.pasajesDevueltos = pasajes;
-    }
-    
-    public void devolverPasaje(Pasaje p) {
-        pasajesDevueltos.agregarFinal(p);
     }
 
     void agregarCompra(Pasaje p) {

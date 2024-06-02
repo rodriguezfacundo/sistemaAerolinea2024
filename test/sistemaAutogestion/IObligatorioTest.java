@@ -910,7 +910,7 @@ public class IObligatorioTest {
                  "D456789-Laura Martinez-22|\n" +
                  "C345678-Juan Perez-30|\n" +
                  "B234567-Mariana Gonzalez-25|\n" +
-                 "A123456-Facundo Rodriguez-21|\n", r.valorString);
+                 "A123456-Facundo Rodriguez-21|", r.valorString);
         System.out.println(r.valorString);
     }
 
@@ -959,7 +959,7 @@ public class IObligatorioTest {
         assertEquals("VUELO-LO34-DEV|\n" +
                  "VUELO-SEC1-CPR|\n"+
                  "VUELO-666HL-DEV|\n"+
-                 "VUELO-IAA12-CPR|\n", r.valorString);
+                 "VUELO-IAA12-CPR|", r.valorString);
         System.out.println(r.valorString);
     }
     
@@ -1088,7 +1088,6 @@ public class IObligatorioTest {
         r = miSistema.comprarPasaje("O567890", "VUELO-SEC1", 1);
         r = miSistema.comprarPasaje("P678901", "VUELO-SEC1", 1);
         r = miSistema.comprarPasaje("Q789012", "VUELO-SEC1", 1);
-        // 15 compras adicionales en categoría premium
         r = miSistema.comprarPasaje("D012345", "VUELO-SEC1", 2);
         r = miSistema.comprarPasaje("E123456", "VUELO-SEC1", 2);
         r = miSistema.comprarPasaje("F234567", "VUELO-SEC1", 2);
@@ -1122,12 +1121,90 @@ public class IObligatorioTest {
     }
 
     @Test
-    public void testVistaDeVuelo() {
-        //Completar para segunda entrega
+    public void testVistaDeVueloOk() {
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~MATRIZ VISTA DE VUELO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        this.precarga();
+        Retorno r = miSistema.crearVuelo("VUELO-SEC1", "Aerolinea Irlandesa", "SEC777", "Egipto", 19, 5, 2024, 30, 15);
+        r = miSistema.comprarPasaje("A123456", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("B234567", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("C345678", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("D456789", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("E567890", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("F678901", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("G789012", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("H890123", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("I901234", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("J012345", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("K123456", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("L234567", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("M345678", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("N456789", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("O567890", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("P678901", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("Q789012", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("R890123", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("S901234", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("T012345", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("U123456", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("V234567", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("W345678", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("X456789", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("Y567890", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("Z678901", "VUELO-SEC1", 1);
+        r = miSistema.comprarPasaje("D012345", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("E123456", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("F234567", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("G345678", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("H456789", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("I567890", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("J678901", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("K789012", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("L890123", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("M901234", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("N012345", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("O123456", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("Q345678", "VUELO-SEC1", 2);
+        r = miSistema.comprarPasaje("R456789", "VUELO-SEC1", 2);
+        r = miSistema.vistaDeVuelo("VUELO-SEC1");
+        assertEquals(Retorno.ok().resultado, r.resultado);
+        assertEquals("**********************************\n" +
+             "           * PRIMERA *\n" +
+             "**********************************\n" +
+             " * R456789 * Q345678 * O123456 * \n" +
+             "**********************************\n" +
+             " * N012345 * M901234 * L890123 * \n" +
+             "**********************************\n" +
+             " * K789012 * J678901 * I567890 * \n" +
+             "**********************************\n" +
+             " * H456789 * G345678 * F234567 * \n" +
+             "**********************************\n" +
+             " * E123456 * D012345 * XXXXXXXX * \n" +
+             "**********************************\n" +
+             "          * ECONÓMICA *\n" +
+             "**********************************\n" +
+             " * Z678901 * Y567890 * X456789 * \n" +
+             "**********************************\n" +
+             " * W345678 * V234567 * U123456 * \n" +
+             "**********************************\n" +
+             " * T012345 * S901234 * R890123 * \n" +
+             "**********************************\n" +
+             " * Q789012 * P678901 * O567890 * \n" +
+             "**********************************\n" +
+             " * N456789 * M345678 * L234567 * \n" +
+             "**********************************\n" +
+             " * K123456 * J012345 * I901234 * \n" +
+             "**********************************\n" +
+             " * H890123 * G789012 * F678901 * \n" +
+             "**********************************\n" +
+             " * E567890 * D456789 * C345678 * \n" +
+             "**********************************\n" +
+             " * B234567 * A123456 * XXXXXXXX * \n" +
+             "**********************************\n" +
+             " * XXXXXXXX * XXXXXXXX * XXXXXXXX * \n" +
+             "**********************************\n", r.valorString);
+        System.out.println(r.valorString);
     }
-   
-
-
+    
     private void precarga() {
         //Datos paises
         Retorno r = miSistema.crearAerolinea("Aerolinea Splinter", "Italia", 12);
@@ -1138,7 +1215,7 @@ public class IObligatorioTest {
         r = miSistema.registrarAvion("SEC777", 45, "Aerolinea Irlandesa");
         r = miSistema.registrarAvion("IFF123", 45, "Aerolinea Irlandesa");
         r = miSistema.registrarAvion("FFF000", 45, "Aerolinea Irlandesa");
-        
+        //Datos clientes
         r = miSistema.registrarCliente("A123456", "Facundo Rodriguez", 21);
         r = miSistema.registrarCliente("B234567", "Mariana Gonzalez", 25);
         r = miSistema.registrarCliente("C345678", "Juan Perez", 30);
