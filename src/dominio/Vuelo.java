@@ -16,7 +16,6 @@ public class Vuelo implements Comparable<Vuelo> {
     private Lista<Pasaje> pasajesPrimeraClaseEmitidos;
     private Cola<Pasaje> pasajesPrimeraClasePendientes;
     private Cola<Pasaje> pasajesEconomicosPendientes;
-    private Cola<Cliente> clientesEnEspera;
     private Lista<Pasaje> pasajesDevueltos;
 
     public Vuelo(String codigoVuelo, Aerolinea aerolinea, Avion avion, String paisDestino, int dia, int mes, int anio, int cantPasajesEcon, int cantPasajesPClase) {
@@ -31,7 +30,6 @@ public class Vuelo implements Comparable<Vuelo> {
         this.pasajesPrimeraClaseEmitidos = new Lista<>(cantPasajesPClase);
         this.pasajesEconomicosPendientes = new Cola<>();
         this.pasajesPrimeraClasePendientes = new Cola<>();
-        this.clientesEnEspera = new Cola<>(); //todo: ver para que es esto
         this.pasajesDevueltos = new Lista<>();
     }
 
@@ -227,7 +225,6 @@ public class Vuelo implements Comparable<Vuelo> {
                 pasajesPrimeraClaseEmitidos.agregarOrdenado(pasajeEnEspera); //En caso de existir clientes en lista de espera, se le otorgará el pasaje al primero de la lista.
                 pasajesPrimeraClasePendientes.desencolar();   
             }
-            p.getVuelo().getAerolinea().getPasajesDevueltos().agregarInicio(p);
         }else if(p.getCategoriaPasaje() == 1){
             pasajesEconomicosEmitidos.eliminarElemento(p);
             if(this.pasajesEconomicosPendientes.esVacia()){
@@ -235,8 +232,11 @@ public class Vuelo implements Comparable<Vuelo> {
                 pasajesEconomicosEmitidos.agregarOrdenado(pasajeEnEspera);
                 pasajesEconomicosPendientes.desencolar();   
             }
-            p.getVuelo().getAerolinea().getPasajesDevueltos().agregarInicio(p);
         }
+        p.getVuelo().getAerolinea().getPasajesDevueltos().agregarInicio(p);
+        Pasaje pActualizado = p;
+        pActualizado.setEsDevuelto(true);
+        p.getCliente().getPasajesComprados().reemplazar(p, pActualizado);
     }
     
 }

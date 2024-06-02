@@ -192,11 +192,6 @@ public class Sistema implements IObligatorio {
         } else{
             Pasaje pasaje = nodoPasaje.getDato();
              vuelo.devolver(pasaje);
-             
-            //Actualizo ese pasaje viejo que tenia estado CPR a estado DEV para luego mostrarlo en el listado pasajes comprados de cliente
-             Pasaje pasajeActualizado = new Pasaje(pasaje.getCliente(), pasaje.getVuelo(), pasaje.getCategoriaPasaje());
-             pasajeActualizado.setEsDevuelto(true);
-             cliente.getPasajesComprados().reemplazar(pasaje, pasajeActualizado);
             return Retorno.ok();   
         }
     }

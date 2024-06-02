@@ -121,7 +121,7 @@ public interface IObligatorio {
     //Devuelve error 1 en caso de que no exista la aerolinea
     public Retorno  pasajesDevueltos(String nombreAerolinea);
 
-    //pre: Se dene ingresar un codigo de vuelo(String).
+    //pre: Se debe ingresar un codigo de vuelo(String).
     //post: Se debe mostrar la distribución de pasajeros en el avión, según las diferentes categorías de pasajes ofrecidos y
     //vendidos. Los asientos (pasajes) de primera clase se sitúan al principio del avión. Todos los aviones cuentan con filas de 3 asientos
     //cada uno.
