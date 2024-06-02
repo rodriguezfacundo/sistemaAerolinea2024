@@ -1,6 +1,8 @@
 package sistemaAutogestion;
 
 import dominio.*;
+import java.util.ArrayList;
+import java.util.List;
 import sistemaAutogestion.Retorno.Resultado;
 import tads.Lista;
 import tads.Nodo;
@@ -134,10 +136,10 @@ public class Sistema implements IObligatorio {
             cantPasajesEcon += diferencia;
         }
         Vuelo nuevoVuelo = new Vuelo(codigoVuelo, aerolineaElegida, avion, paisDestino, dia, mes, anio, cantPasajesEcon, cantPasajesPClase);
-        if (vuelos.obtenerElemento(nuevoVuelo) != null) {
+        if (vuelos.obtenerElemento(nuevoVuelo) != null) {//Usamos el obtener elemento en este caso porque valida con el compare to donde el vuelo se basa en el codigo de vuelo.
             return Retorno.error1();
         } 
-        if (avion.getVuelos().estaElemento(nuevoVuelo)){
+        if (avion.getVuelos().estaElemento(nuevoVuelo)){//Usamos el esta elemento porque usa el equals, y en este caso el equals del avion lo valida por dia, mes y anio.
             return Retorno.error4();
         }
          else {
@@ -292,58 +294,52 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno vistaDeVuelo(String codigoVuelo) {
-        Nodo<Vuelo> nodoVuelo = this.vuelos.obtenerElemento(new Vuelo(codigoVuelo, null, null, "", 0, 0, 0, 0, 0));
-        Vuelo vuelo = nodoVuelo.getDato();
-        StringBuilder sb = new StringBuilder();
+        Vuelo vuelo = this.vuelos.obtenerElemento(new Vuelo(codigoVuelo, null, null, "", 0, 0, 0, 0, 0)).getDato();
+        List<String> partesMatriz = new ArrayList<>();
+        String[][] asientosPrimeraClase = generarMatriz(vuelo.getPasajesPrimeraClaseEmitidos(), vuelo.getPasajesPrimeraClaseEmitidos().getCantMaxima());
+        String[][] asientosEconomicos = generarMatriz(vuelo.getPasajesEconomicosEmitidos(), vuelo.getPasajesEconomicosEmitidos().getCantMaxima());
 
-        // Matrices para los asientos
-        String[][] primeraClase = generarMatriz(vuelo.getPasajesPrimeraClaseEmitidos(), vuelo.getPasajesPrimeraClaseEmitidos().getCantMaxima());
-        String[][] economica = generarMatriz(vuelo.getPasajesEconomicosEmitidos(), vuelo.getPasajesEconomicosEmitidos().getCantMaxima());
+        partesMatriz.add("**********************************\n");
+        partesMatriz.add("           * PRIMERA *\n");
+        partesMatriz.add("**********************************\n");
+        formatearMatriz(asientosPrimeraClase, partesMatriz);
+        partesMatriz.add("**********************************\n");
+        partesMatriz.add("          * ECONÓMICA *\n");
+        partesMatriz.add("**********************************\n");
+        formatearMatriz(asientosEconomicos, partesMatriz);
+        partesMatriz.add("**********************************\n");
 
-        sb.append("**********************************\n")
-          .append("           * PRIMERA *\n")
-          .append("**********************************\n");
-
-        formatearMatriz(primeraClase, sb);
-
-        sb.append("**********************************\n")
-          .append("          * ECONÓMICA *\n")
-          .append("**********************************\n");
-
-        formatearMatriz(economica, sb);
-
-        sb.append("**********************************\n");
-
-        return new Retorno(Retorno.Resultado.OK, sb.toString());
+        String resultadoMatriz = String.join("", partesMatriz);
+        return new Retorno(Retorno.Resultado.OK, resultadoMatriz);
     }
-    
+
     private String[][] generarMatriz(Lista<Pasaje> pasajes, int capacidad) {
         int filas = (capacidad + 2) / 3;
-        String[][] matriz = new String[filas][3];
+        String[][] matrizVuelo = new String[filas][3];
 
         Nodo<Pasaje> nodoPasaje = pasajes.getInicio();
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < 3; j++) {
                 if (nodoPasaje != null) {
-                    matriz[i][j] = nodoPasaje.getDato().getCliente().getPasaporte();
+                    matrizVuelo[i][j] = nodoPasaje.getDato().getCliente().getPasaporte();
                     nodoPasaje = nodoPasaje.getSiguiente();
                 } else {
-                    matriz[i][j] = "XXXXXXXX";
+                    matrizVuelo[i][j] = "XXXXXXXX";
                 }
             }
         }
-        return matriz;
+        return matrizVuelo;
     }
-    
-    private void formatearMatriz(String[][] matriz, StringBuilder sb) {
-       for (int i = 0; i < matriz.length; i++) {
-            sb.append(" * ");
+
+    private void formatearMatriz(String[][] matriz, List<String> partes) {
+        for (int i = 0; i < matriz.length; i++) {
+            partes.add(" * ");
             for (String asiento : matriz[i]) {
-                sb.append(asiento).append(" * ");
+                partes.add(asiento + " * ");
             }
-            sb.append("\n");
+            partes.add("\n");
             if (i < matriz.length - 1) {
-                sb.append("**********************************\n");
+                partes.add("**********************************\n");
             }
         }
     }
