@@ -90,7 +90,7 @@ public class Lista<T extends Comparable<T>> implements ILista<T> {
         Nodo<T> pactual = inicio;
         boolean estaElem = false;
         while (pactual != null && !estaElem) {
-            if (pactual.getDato().compareTo(x) == 0) {
+            if (pactual.getDato().equals(x)) {
                 estaElem = true;
             } else {
                 pactual = pactual.getSiguiente();
@@ -170,6 +170,26 @@ public class Lista<T extends Comparable<T>> implements ILista<T> {
         if (actual != null) {
             System.out.println(" - " + actual.getDato());
             mostrarREC(actual.getSiguiente());
+        }
+    }
+
+    @Override
+    public String mostrarRecString(Nodo<T> actual) {
+        if (actual == null) {
+            return "";
+        } else {
+            return actual.getDato().toString() + '\n' + mostrarRecString(actual.getSiguiente());
+        }
+    }
+    
+    @Override
+    public void reemplazar(T antiguo, T nuevo) {
+        Nodo<T> actual = inicio;
+        while (actual != null) {
+            if (actual.getDato().compareTo(antiguo) == 0) {
+                actual.setDato(nuevo);
+            }
+            actual = actual.getSiguiente();
         }
     }
 }

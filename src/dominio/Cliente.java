@@ -7,16 +7,12 @@ public class Cliente implements Comparable<Cliente> {
     private String pasaporte;
     private String nombre;
     private int edad;
-    private Lista<Pasaje> pasajesComprados;//tal vez cambiemos a pila en un futuro
+    private Lista<Pasaje> pasajesComprados;
     private Lista<Pasaje> pasajesDevueltos;
 
     @Override
     public String toString() {
-        return "Cliente{" +
-                "pasaporte='" + pasaporte + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", edad=" + edad +
-                '}';
+        return pasaporte + '-' + nombre + '-' + + edad + '|';
     }
 
     public Cliente(String pasaporte, String nombre, int edad) {
@@ -28,8 +24,18 @@ public class Cliente implements Comparable<Cliente> {
     }
 
     @Override
-    public int compareTo(Cliente o) {
-        return 0;
+    public int compareTo(Cliente c) {
+        return this.pasaporte.compareTo(c.pasaporte);
+    }
+    
+    @Override
+    public boolean equals(Object c){
+        Cliente cliente = (Cliente)c;
+        if(this.pasaporte == cliente.getPasaporte()){
+            return true;
+        } else{
+            return false;
+        }
     }
 
     public String getPasaporte() {
@@ -57,7 +63,7 @@ public class Cliente implements Comparable<Cliente> {
     }
 
     public Lista<Pasaje> getPasajesDevueltos() {
-        return pasajesDevueltos;
+        return this.pasajesDevueltos;
     }
     
     public Lista<Pasaje> getPasajesComprados(){
@@ -73,6 +79,13 @@ public class Cliente implements Comparable<Cliente> {
     }
 
     void agregarCompra(Pasaje p) {
-        pasajesComprados.agregarFinal(p);
+        p.setEsDevuelto(false);
+        pasajesComprados.agregarInicio(p);
+    }
+
+    public void actualizarPasajeComprado(Pasaje pasaje) {
+        this.pasajesComprados.eliminarElemento(pasaje);
+        pasaje.setEsDevuelto(true);
+        this.pasajesComprados.agregarFinal(pasaje);
     }
 }

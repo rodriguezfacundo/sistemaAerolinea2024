@@ -92,7 +92,7 @@ public class Pila<T extends Comparable<T>> implements IPila<T> {
     public boolean existeElemento(T dato) { //Todo: Preguntar si se puede hacer dentro de la TAD pila
         Nodo actual = inicio;
         while (actual != null) {
-            if (actual.getDato().equals(dato)) {
+            if (actual.getDato().compareTo(dato) == 0) {
                 return true; // Dato encontrado
             }
             actual = actual.getSiguiente();
@@ -103,12 +103,12 @@ public class Pila<T extends Comparable<T>> implements IPila<T> {
     public Nodo<T> ObtenerElemento(T dato) {//Todo: Preguntar si se puede hacer dentro de la TAD pila
         Nodo<T> actual = inicio;
         while (actual != null) {
-            if (actual.getDato().equals(dato)) {
-                return actual; // Dato encontrado
+            if (actual.getDato().compareTo(dato) == 0) {
+                return actual;
             }
             actual = actual.getSiguiente();
         }
-        return null; // Dato no encontrado
+        return null;
     }
 
     public String imprimirPila() { //Todo: Preguntar si se puede hacer dentro de la TAD pila

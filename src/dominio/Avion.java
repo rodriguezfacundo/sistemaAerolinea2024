@@ -1,12 +1,12 @@
 package dominio;
 
-import tads.ListaVuelo;
+import tads.Lista;
 
 public class Avion implements Comparable<Avion> {
     private String codigo;
     private int capacidadMax;
     private Aerolinea aerolinea;
-    private ListaVuelo<Vuelo> vuelos = new ListaVuelo<>();
+    private Lista<Vuelo> vuelos = new Lista<>();
     private boolean tieneViajeVendido;
 
      public Avion(String codigo, int capacidadMax, Aerolinea aerolinea) {
@@ -27,6 +27,10 @@ public class Avion implements Comparable<Avion> {
 
     public void setTieneViajeVendido(boolean tieneViajeVendido) {
         this.tieneViajeVendido = tieneViajeVendido;
+    }
+    
+    public Lista<Vuelo> getVuelos() {
+        return vuelos;
     }
 
     @Override
@@ -62,16 +66,9 @@ public class Avion implements Comparable<Avion> {
         return codigo + '-' + capacidadMax + '|';
     }
     
-    public ListaVuelo<Vuelo> getVuelos() {
-        return vuelos;
-    }
-
-    public boolean disponibilidad(int dia, int mes, int anio) {
+    /*public boolean disponibilidad(int dia, int mes, int anio) {
         boolean r = true;
         if(this.vuelos.obtenerPorFecha(dia,mes,anio)!= null) return false;
         return r;
-    }
-    
-    
-
+    }*/
 }

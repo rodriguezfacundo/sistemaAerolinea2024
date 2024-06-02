@@ -56,5 +56,9 @@ public interface ILista<T extends Comparable<T>> {
     //pre: Se tiene un nodo del tipo T y una lista del tipo T
     // post:  muestra los datos de la lista de forma recursiva
     public void mostrarREC(Nodo<T> inicio);
+    
+    public String mostrarRecString(Nodo<T> inicio);
+    
+    public void reemplazar(T x, T y);
 
 }
